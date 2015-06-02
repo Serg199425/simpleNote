@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head>
+        {% load staticfiles %}
+        {% load bootstrap3 %}
+        {% bootstrap_css %}
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/static/styles/style.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/static/styles/prettyPhoto.css" type="text/css" media="screen" />
+        <link id="gFontName" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Cuprum:regular,italic,bold,bolditalic" type="text/css" />
+    </head>
+    <body class="standard simple row">
+        <script src="/static/js/jquery-1.6.4.min.js" type="text/javascript"></script>
+        <script src="/static/js/jquery.prettyPhoto.js" type="text/javascript"></script>
+        <script src="/static/js/script.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+                if (jQuery.browser.msie && jQuery.browser.version < 9){
+                    var $windowWidth = jQuery(window).width()+17;
+                    var $windowHeight = jQuery(window).height()+17;
+                } else {
+                    var $windowWidth = window.innerWidth;
+                    var $windowHeight = window.innerHeight;
+                }
+                
+                var $image = jQuery('.bgImage img');
+                var img = new Image();
+                
+                img.src = jQuery($image).attr('src');
+                
+                var intervalId = setInterval(function(){
+                    if (img.complete){
+                        var $imgWidth = img.width;
+                        var $imgHeight = img.height;
+                        var $widthFactor = parseFloat($imgWidth/$windowWidth);
+                        var $heightFactor = parseFloat($imgHeight/$windowHeight);
+                        
+                        if ($widthFactor < $heightFactor){
+                            jQuery($image).css({width:$windowWidth+'px', height:parseInt($imgHeight/$widthFactor)+'px', top:'-'+parseInt((parseInt($imgHeight/$widthFactor)-$windowHeight)/2)+'px', left:0});
+                        } else {
+                            jQuery($image).css({width:parseInt($imgWidth/$heightFactor)+'px', height:$windowHeight+'px', top:0, left:'-'+parseInt((parseInt($imgWidth/$heightFactor)-$windowWidth)/2)+'px'});
+                        }
+                        
+                        clearInterval(intervalId);
+                        LoadImageStart();
+                    }
+                }, 50);
+                
+                function LoadImageStart(){
+                    $image.parent().fadeIn(500, function(){
+                        jQuery(this).css({display:'block'});
+                    });
+                }
+                
+                jQuery(window).resize(function(){
+                    if (jQuery.browser.msie && jQuery.browser.version < 9){
+                        var $windowWidth = jQuery(window).width()+17;
+                        var $windowHeight = jQuery(window).height();
+                    } else {
+                        var $windowWidth = window.innerWidth;
+                        var $windowHeight = window.innerHeight;
+                    }
+                    
+                    var $imgWidth = img.width;
+                    var $imgHeight = img.height;
+                    var $widthFactor = parseFloat($imgWidth/$windowWidth);
+                    var $heightFactor = parseFloat($imgHeight/$windowHeight);
+                    
+                    if ($widthFactor < $heightFactor){
+                        jQuery($image).css({width:$windowWidth+'px', height:parseInt($imgHeight/$widthFactor)+'px', top:'-'+parseInt((parseInt($imgHeight/$widthFactor)-$windowHeight)/2)+'px', left:0});
+                    } else {
+                        jQuery($image).css({width:parseInt($imgWidth/$heightFactor)+'px', height:$windowHeight+'px', top:0, left:'-'+parseInt((parseInt($imgWidth/$heightFactor)-$windowWidth)/2)+'px'});
+                    }
+                });
+            });
+        </script>
+        <div class="col-lg-8 col-lg-offset-2" id="page">
+            <div class="header_wrap">
+                <div id="header">
+                    <div class="header_inner">
+                        <div class="navigation_wrap">
+                            <ul id="navigation">
+                                <li class="current_page_item"><a href="about.html">About<span>Read my bio</span></a></li>
+                                <li><a href="shortcodes.html">Features<span>Tasty cakes</span></a>
+                                    <ul>
+                                        <li><a href="typography.html">Typography</a></li>
+                                        <li><a href="shortcodes.html">Shortcodes</a></li>
+                                        <li><a href="fwidth.html">Layouts</a>
+                                            <ul>
+                                                <li><a href="error.html">404 Error Page</a></li>
+                                                <li><a href="fwidth.html">Full Width</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="profiles.html">Social Profiles</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="gallery_motion.html">Gallery<span>Photo temple</span></a>
+                                    <ul>
+                                        <li><a href="gallery_motion.html">Motion Gallery</a></li>
+                                        <li><a href="gallery_static.html">Static Gallery</a></li>
+                                        <li><a href="gallery_pattern.html">Gallery With Pattern</a></li>
+                                        <li><a href="gallery_one.html">One column</a></li>
+                                        <li><a href="gallery_two.html">Two columns</a></li>
+                                        <li><a href="gallery_three.html">Three columns</a></li>
+                                        <li><a href="album.html">Album</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="sidebar_blogright.html">Blog<span>Cool postings</span></a>
+                                    <ul>
+                                        <li><a href="sidebar_blogright.html">With Sidebar</a>
+                                            <ul>
+                                                <li><a href="sidebar_blogright.html">Right Sidebar</a></li>
+                                                <li><a href="sidebar_blogleft.html">Left Sidebar</a></li>
+                                                <li><a href="openpost_sidebar.html">Open Post</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="fwidth_blog.html">Full Width</a>
+                                            <ul>
+                                                <li><a href="fwidth_blog.html">Full Width</a></li>
+                                                <li><a href="openpost.html">Open Post</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><a href="contacts.html">Contacts<span>Don't be shy</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="header_arrow_wrap">
+                        <a href="#" class="header_arrow"><span>&nbsp;</span></a>
+                    </div>
+                </div>
+            </div>
+            <div id="middle">
+                <div class="middle_content">
+                    {% block content %}{% endblock %}
+                <div class="cl"></div>
+                    <div class="cl"></div>
+                </div>
+                <div id="footer">
+                </div>
+            </div>
+            <div class="cl"></div>
+        </div>
+    </body>
+</html>
