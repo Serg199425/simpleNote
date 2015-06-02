@@ -122,6 +122,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     '/styles/',
     '/media',
+    '/fonts/',
 )
 
 STATIC_DOC_ROOT = '/static/media'
