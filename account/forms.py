@@ -12,6 +12,12 @@ class RegistrationFormAccount(RegistrationFormUniqueEmail):
 	def clean_username(self):
 		return self.cleaned_data['username']
 
+	def clean_email(self):
+		email = self.cleaned_data['email']
+		if User.objects.filter(email=email).count() > 0:
+			raise forms.ValidationError('This email is already in use.')
+		return email
+
 	def clean(self):
 		if not self.errors:
 			localpart = self.cleaned_data['email'].split('@',1)[0][:25]

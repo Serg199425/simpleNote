@@ -8,24 +8,18 @@ from django.contrib.auth.models import User
 from IPython import embed
 from django.contrib import auth
 from django.http import HttpResponseRedirect
+from django.contrib.auth import logout
 
 class RegistrationFormView(RegistrationView):
 	form_class = RegistrationFormAccount
-	def register(self, request, success_url=None,
-         form_class=RegistrationFormAccount, 
-         profile_callback=None,
-         template_name='registration/registration_form.html',
-         extra_context=None):
-		userMail = request.REQUEST.get('email', None)
-		userPass = request.REQUEST.get('password', None)
 
 	def form_valid(self, request, form):
 		email = request.REQUEST.get('email', None)
 		password = request.REQUEST.get('password1', None)
 		new_user = User.objects.create_user(email, email, password)
 
-		if new_user is not None:
-			auth.login(request, user)
+		if new_user and auth.authenticate(username = new_user.username, password = password):
+			auth.login(request, new_user)
 			return HttpResponseRedirect('/')
 		else:
 			return HttpResponseRedirect('/login')
@@ -40,7 +34,7 @@ class RegistrationCompleteView(TemplateView):
 		
 
 class LoginFormView(FormView):
-	template_name = "registration/login.html"
+	template_name = "registration/login_form.html"
 	form_class = LoginForm
 	def form_valid(self, form):
 		username = form.cleaned_data['username']
@@ -56,7 +50,13 @@ class LoginFormView(FormView):
 			auth.login(self.request, user)
 			return HttpResponseRedirect('/')
 		else:
-			return HttpResponseRedirect('/login')
+			return HttpResponseRedirect(reverse('account:login_path'))
 
 class IndexView(TemplateView):
 	template_name = "account/index.html"
+
+def logout_view(request):
+	if request.user.is_authenticated():
+		logout(request)
+	return HttpResponseRedirect(reverse('account:login_path'))
+		
