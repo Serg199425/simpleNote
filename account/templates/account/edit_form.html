@@ -1,7 +1,7 @@
 {% extends "account/index.html" %}
 {% block account %}
 	<h2>Account Editor</h2>
-	<form method="post" action="">
+	<form method="post" action="" enctype="multipart/form-data">
 		<dl class="register">   
 			{% csrf_token %}
 			{% for field in form %}

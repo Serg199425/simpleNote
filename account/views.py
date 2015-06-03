@@ -5,7 +5,6 @@ from django.views.generic.edit import FormView
 from django.views.generic import TemplateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from IPython import embed
 from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout
@@ -70,15 +69,17 @@ class EditView(FormView):
 	def get_initial(self):
 		user = self.request.user
 		account = Account.objects.get(user_id=user.id)
-		return {'first_name': account.first_name, 'last_name': account.last_name }
+		return {'first_name': account.first_name, 'last_name': account.last_name, 'avatar': account.avatar }
 	def form_valid(self, form):
 		first_name = form.cleaned_data['first_name']
 		last_name = form.cleaned_data['last_name']
+		avatar = form.cleaned_data['avatar']
 		user = self.request.user
 		try:
 			account = Account.objects.get(user_id=user.id)
 			account.first_name = first_name
 			account.last_name = last_name
+			account.avatar = avatar
 			account.save()
 			return HttpResponseRedirect(reverse('account:edit'))
 		except Account.DoesNotExist:

@@ -6422,3 +6422,7 @@ body.skin-3 {
     display: none;
   }
 }
+.avatar-image {
+  width: 60px;
+  height: 60px;
+}

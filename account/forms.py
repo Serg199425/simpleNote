@@ -1,7 +1,9 @@
 from django import forms
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib.auth.models import User
+from account.models import Account
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.files.images import get_image_dimensions
 
 class RegistrationFormAccount(RegistrationFormUniqueEmail):
 	username = forms.CharField(widget=forms.HiddenInput, required=False)
@@ -36,3 +38,23 @@ class LoginForm(AuthenticationForm):
 class EditForm(forms.Form):
 	first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':"First Name"}))
 	last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':"Last Name"}))
+	avatar = forms.ImageField(required=False)
+	class Meta:
+		model = Account
+	def clean_avatar(self):
+		avatar = self.cleaned_data['avatar']
+		try:
+			main, sub = avatar.content_type.split('/')
+			if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
+				raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
+            
+			if len(avatar) > (20 * 1024):
+				raise forms.ValidationError(u'Avatar file size may not exceed 20k.')
+
+		except AttributeError:
+			"""
+			Handles case when we are updating the user profile
+			and do not supply a new avatar
+			"""
+			pass
+		return avatar

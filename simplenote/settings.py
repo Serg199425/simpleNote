@@ -122,11 +122,10 @@ DEFAULT_FROM_EMAIL = 'info@google.ru'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     '/styles/',
-    '/media',
     '/fonts/',
 )
 
-STATIC_DOC_ROOT = '/static/media'
-MEDIA_ROOT = '/media/'
-MEDIA_URL = '/media/'
+STATIC_DOC_ROOT = 'media/'
+MEDIA_ROOT = 'media/'
+MEDIA_URL = 'media/'
 SITE_ID = 2
