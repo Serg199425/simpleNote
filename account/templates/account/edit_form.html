@@ -1,0 +1,16 @@
+{% extends "account/index.html" %}
+{% block account %}
+	<h2>Account Editor</h2>
+	<form method="post" action="">
+		<dl class="register">   
+			{% csrf_token %}
+			{% for field in form %}
+			    <div class="form-group">{{ field }}</div>
+			    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
+			    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
+			    </dd>
+			{% endfor %}
+		</dl>
+		<input type="submit" value="Change" class="clearfix btn btn-primary block full-width m-b">
+	</form>
+{% endblock %}

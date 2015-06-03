@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from registration.views import RegistrationView
-from account.forms import RegistrationFormAccount, LoginForm
+from account.forms import RegistrationFormAccount, LoginForm, EditForm
 from django.views.generic.edit import FormView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from IPython import embed
@@ -62,4 +62,26 @@ def logout_view(request):
 	if request.user.is_authenticated():
 		logout(request)
 	return HttpResponseRedirect(reverse('account:login_path'))
+
+
+class EditView(FormView):
+	form_class = EditForm
+	template_name = "account/edit_form.html"
+	def get_initial(self):
+		user = self.request.user
+		account = Account.objects.get(user_id=user.id)
+		return {'first_name': account.first_name, 'last_name': account.last_name }
+	def form_valid(self, form):
+		first_name = form.cleaned_data['first_name']
+		last_name = form.cleaned_data['last_name']
+		user = self.request.user
+		try:
+			account = Account.objects.get(user_id=user.id)
+			account.first_name = first_name
+			account.last_name = last_name
+			account.save()
+			return HttpResponseRedirect(reverse('account:edit'))
+		except Account.DoesNotExist:
+			return HttpResponseRedirect('/')
+
 		
