@@ -23,7 +23,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="layouts.html"><i class="fa fa-envelope"></i> <span class="nav-label">My Notes</span> <span class="label label-primary pull-right">NEW</span></a>
+                    <a href="{% url 'note:index' %}"><i class="fa fa-envelope"></i> <span class="nav-label">My Notes</span> <span class="label label-primary pull-right">NEW</span></a>
                 </li>
                 <li>
                     <a href="css_animation.html"><i class="fa fa-globe"></i> <span class="nav-label">Shared Notes</span><span class="label label-info pull-right">62</span></a>
@@ -184,8 +184,8 @@
     </div>
             <div class="row  border-bottom white-bg dashboard-header">
 
-                <div class="col-sm-3">
-                    {% block account %}
+                <div class="col-sm-12">
+                    {% block main_content %}
                     {% endblock %}
                 </div>
         </div>

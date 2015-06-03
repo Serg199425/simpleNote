@@ -889,6 +889,8 @@ fieldset[disabled] .btn-white.active {
 }
 .form-control,
 .form-control:focus,
+.note-textarea-container,
+.note-textarea-container textarea:focus,
 .has-error .form-control:focus,
 .has-success .form-control:focus,
 .has-warning .form-control:focus,
@@ -1747,8 +1749,8 @@ table.dataTable thead .sorting:after {
 .i-checks {
   padding-left: 0;
 }
-.form-control,
-.single-line {
+.form-control, .form-group
+.single-line, .note-textarea-container textarea {
   background-color: #FFFFFF;
   background-image: none;
   border: 1px solid #e5e6e7;
@@ -1761,7 +1763,7 @@ table.dataTable thead .sorting:after {
   font-size: 14px;
 }
 .form-control:focus,
-.single-line:focus {
+.single-line:focus, .note-textarea-container textarea:focus {
   border-color: #1ab394 !important;
 }
 .has-success .form-control {
@@ -6425,4 +6427,16 @@ body.skin-3 {
 .avatar-image {
   width: 60px;
   height: 60px;
+}
+
+.small-button {
+  width: 100px;
+}
+
+.small-input {
+  width: 300px;
+}
+
+.button-center {
+  text-align: center;
 }

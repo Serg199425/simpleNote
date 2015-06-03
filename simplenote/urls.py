@@ -7,9 +7,11 @@ urlpatterns = [
 	url(r'^register/$', RegistrationFormView.as_view(), name='registration_register'),
 	url(r'^register/complete/$', RegistrationCompleteView.as_view(), name='registration_complete'),
 	url(r'^', include('account.urls', namespace="account")),
+	url(r'^', include('note.urls', namespace="note")),
     url(r'^', include('registration.auth_urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)$',
             'django.views.static.serve',
             {'document_root': settings.MEDIA_ROOT, }),
+    url(r'^redactor/', include('redactor.urls')),
 ]

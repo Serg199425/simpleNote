@@ -54,9 +54,6 @@ class LoginFormView(FormView):
 		else:
 			return HttpResponseRedirect(reverse('account:login_path'))
 
-class IndexView(TemplateView):
-	template_name = "account/index.html"
-
 def logout_view(request):
 	if request.user.is_authenticated():
 		logout(request)

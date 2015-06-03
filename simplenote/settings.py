@@ -41,6 +41,8 @@ INSTALLED_APPS = (
     'registration',
     'bootstrap3',
     'account',
+    'redactor',
+    'note',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -129,3 +131,6 @@ STATIC_DOC_ROOT = 'media/'
 MEDIA_ROOT = 'media/'
 MEDIA_URL = 'media/'
 SITE_ID = 2
+
+REDACTOR_OPTIONS = {'lang': 'en'}
+REDACTOR_UPLOAD = 'uploads/'
