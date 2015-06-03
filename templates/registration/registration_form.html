@@ -1,16 +1,28 @@
 {% extends "base.html" %}
+{% load account_filters %}
 {% block content %}
-<h2 class="home">Registraion</h2>
-<form method="post" action="">
-<dl class="register">
-{% for field in form %}
-    <dt>{{ field.label_tag }}</dt>
-    <dd class="clearfix">{{ field }}
-    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
-    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
-    </dd>
-{% endfor %}
-</dl>
-<input type="submit" value="Register" / class="clearfix">
-</form>
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">SN+</h1>
+            </div>
+            <h3>Welcome to SN+</h3>
+            <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+            </p>
+            <h3>Sign up to SN+</h3>
+            <form class="m-t" method="post" action="">
+            	{% csrf_token %}
+				<dl class="register">
+				{% for field in form %}
+				    <div class="form-group">{{ field }}</div>
+				    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
+				    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
+				    </dd>
+				{% endfor %}
+				</dl>
+				<input type="submit" value="Register" / class="clearfix btn btn-primary block full-width m-b">
+			</form>
+            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+        </div>
+    </div>
 {% endblock %}

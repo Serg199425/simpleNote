@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'registration',
     'bootstrap3',
+    'account',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'simplenote.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates', 'templatetags'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,8 +114,8 @@ ACCOUNT_ACTIVATION_DAYS = 2
 AUTH_USER_EMAIL_UNIQUE = True
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
-EMAIL_HOST_USER = 'seregasivyi@gmail.com'
-EMAIL_HOST_PASSWORD = 'seregasivyi'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = 'info@google.ru'
 
@@ -125,6 +126,9 @@ STATICFILES_DIRS = (
     '/fonts/',
 )
 
+AUTH_PROFILE_MODULE = 'simplenote.account.account'
+
 STATIC_DOC_ROOT = '/static/media'
 MEDIA_ROOT = '/media/'
 MEDIA_URL = '/media/'
+SITE_ID = 2
