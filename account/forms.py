@@ -1,6 +1,7 @@
 from django import forms
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
 
 class RegistrationFormAccount(RegistrationFormUniqueEmail):
 	username = forms.CharField(widget=forms.HiddenInput, required=False)
@@ -20,3 +21,8 @@ class RegistrationFormAccount(RegistrationFormUniqueEmail):
 				self.cleaned_data['username'] = localpart
 		super(RegistrationFormAccount, self).clean()
 		return self.cleaned_data
+
+
+class LoginForm(AuthenticationForm):
+	username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':"Username or Email"}))
+	password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':"Password"}))

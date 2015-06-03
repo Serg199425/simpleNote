@@ -1,31 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Login</h1>
-
-{% if user.is_authenticated %}
-{{ user.username }}, you already signed in. 
-{% else %}
-{% if form.non_field_errors %}
-{{ form.non_field_errors }}
-{% endif %}
-
-<form method="post" action="">
-<dl class="register">   
-{% for field in form %}
-    <dt>{{ field.label_tag }}</dt>
-    <dd class="clearfix">{{ field }}
-    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
-    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
-    </dd>
-{% endfor %}
-</dl>
-<input type="submit" value="Sign In" / class="clearfix">
-</form>
-    
-<script type="text/javascript">
-document.getElementById('id_username').focus()
-</script>
-
- <br/><br/>
-{% endif %}
+	<div class="middle-box text-center loginscreen animated fadeInDown">
+	    <div>
+	        <div>
+	            <h1 class="logo-name">IN+</h1>
+	        </div>
+	        <h3>Welcome to SN+</h3>
+	        <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+	            <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
+	        </p>
+	        <p>Login in. To see it in action.</p>
+	        {% if user.is_authenticated %}
+				{{ user.username }}, you already signed in.
+			{% else %}
+		       	<form method="post" action="">
+					<dl class="register">   
+						{% for field in form %}
+						    <div class="form-group">{{ field }}</div>
+						    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
+						    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
+						    </dd>
+						{% endfor %}
+					</dl>
+					<input type="submit" value="Sign In" / class="clearfix">
+				</form>
+			{% endif %}
+	        <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+	    </div>
+	</div>
+	<script type="text/javascript">
+	document.getElementById('id_username').focus()
+	</script>
 {% endblock %}

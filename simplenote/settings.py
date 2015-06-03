@@ -126,8 +126,6 @@ STATICFILES_DIRS = (
     '/fonts/',
 )
 
-AUTH_PROFILE_MODULE = 'simplenote.account.account'
-
 STATIC_DOC_ROOT = '/static/media'
 MEDIA_ROOT = '/media/'
 MEDIA_URL = '/media/'
