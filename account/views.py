@@ -9,6 +9,7 @@ from IPython import embed
 from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout
+from account.models import Account
 
 class RegistrationFormView(RegistrationView):
 	form_class = RegistrationFormAccount
@@ -17,8 +18,10 @@ class RegistrationFormView(RegistrationView):
 		email = request.REQUEST.get('email', None)
 		password = request.REQUEST.get('password1', None)
 		new_user = User.objects.create_user(email, email, password)
-
-		if new_user and auth.authenticate(username = new_user.username, password = password):
+		new_user = auth.authenticate(username = new_user.username, password = password)
+		if new_user is not None:
+			account = Account(user=new_user, first_name="", last_name="")
+			account.save()
 			auth.login(request, new_user)
 			return HttpResponseRedirect('/')
 		else:

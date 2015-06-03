@@ -1,3 +1,8 @@
 from django.db import models
+from account.fields import AutoOneToOneField
+from django.contrib.auth.models import User
 
-# Create your models here.
+class Account(models.Model):
+	user = AutoOneToOneField(User, related_name='account', verbose_name=('User'), primary_key=True)
+	first_name = models.CharField(max_length=30)
+	last_name = models.CharField(max_length=30)
