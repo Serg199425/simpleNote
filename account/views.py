@@ -9,6 +9,7 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout
 from account.models import Account
+from django.contrib.auth.decorators import login_required
 
 class RegistrationFormView(RegistrationView):
 	form_class = RegistrationFormAccount
@@ -59,8 +60,13 @@ def logout_view(request):
 		logout(request)
 	return HttpResponseRedirect(reverse('account:login_path'))
 
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+        return login_required(view, login_url='/login/')
 
-class EditView(FormView):
+class EditView(LoginRequiredMixin, FormView):
 	form_class = EditForm
 	template_name = "account/edit_form.html"
 	def get_initial(self):
