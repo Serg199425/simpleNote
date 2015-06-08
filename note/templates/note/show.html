@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% block main_content %}
+	<h2>
+		{{ note.title }}
+		<br>
+		<small>{{ note.date }}</small>
+	</h2>
+	<p>{{ note.short_text }}</p>
+{% endblock %}

@@ -2,24 +2,28 @@ from django.shortcuts import render
 from note.forms import EditNoteForm
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from note.models import Note
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic.detail import DetailView
 
-class LoginRequiredMixin(object):
-    @classmethod
-    def as_view(cls, **initkwargs):
-        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
-        return login_required(view, login_url='/login/')
-
-class EditNoteView(LoginRequiredMixin, FormView):
+class EditNoteView(FormView):
 	form_class = EditNoteForm
 	template_name = "note/add_note_form.html"
+	model = Note
 	def get_initial(self):
 		user = self.request.user
+		try:
+			note = Note.objects.get(pk=self.kwargs['pk'])
+			return {'title': note.title, 'short_text': note.short_text }
+		except:
+			return
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(EditNoteView, self).dispatch(request, *args, **kwargs)
 	def form_valid(self, form):
 		short_text = form.cleaned_data['short_text']
 		title = form.cleaned_data['short_text']
@@ -28,17 +32,31 @@ class EditNoteView(LoginRequiredMixin, FormView):
 		note.save()
 		return HttpResponseRedirect(reverse('note:index'))
 
-class IndexView(LoginRequiredMixin, ListView):
+class IndexView(ListView):
 	template_name = "note/index.html"
 	model = Note
 	context_object_name = 'notes'
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(IndexView, self).dispatch(request, *args, **kwargs)
 
-@login_required(login_url='/login/')
-def delete(request, note_id):
-	try:
-		note = Note.objects.get(id=note_id)
-		note.delete()
+class DeleteView(DeleteView):
+	model = Note
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(DeleteView, self).dispatch(request, *args, **kwargs)
+	def delete(self, request, *args, **kwargs):
+		delete_object = Note.objects.get(pk=kwargs['pk'])
+		if delete_object is not None:
+			delete_object.delete()
 		return HttpResponseRedirect(reverse('note:index'))
-	except User.DoesNotExist:
-		return HttpResponseRedirect(reverse('note:index'))
-	
+	def get(self, *args, **kwargs):
+		return self.post(*args, **kwargs)
+
+class ShowView(DetailView):
+	template_name = "note/show.html"
+	model = Note
+	context_object_name = 'note'
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(ShowView, self).dispatch(request, *args, **kwargs)
