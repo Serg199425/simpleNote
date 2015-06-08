@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'account',
     'redactor',
     'note',
+    'friends'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -129,7 +130,7 @@ STATICFILES_DIRS = (
 
 STATIC_DOC_ROOT = 'media/'
 MEDIA_ROOT = 'media/'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 SITE_ID = 2
 
 REDACTOR_OPTIONS = {'lang': 'en'}

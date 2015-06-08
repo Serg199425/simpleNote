@@ -52,9 +52,5 @@ class EditForm(forms.Form):
 				raise forms.ValidationError(u'Avatar file size may not exceed 20k.')
 
 		except AttributeError:
-			"""
-			Handles case when we are updating the user profile
-			and do not supply a new avatar
-			"""
 			pass
 		return avatar

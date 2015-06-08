@@ -7,13 +7,13 @@ class Account(models.Model):
 	user = AutoOneToOneField(User, related_name='account', verbose_name=('User'), primary_key=True)
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
-	avatar = models.ImageField(default='media/image.jpg')
+	avatar = models.ImageField(default='image.jpg')
 
 	def full_name(self):
 		return self.first_name + " " + self.last_name
 
 	def image(self):
-		if self.avatar.url == 'media/False':
-			return "media/image.jpg"
+		if self.avatar.url == '/media/False':
+			return "/media/image.jpg"
 		else:
 			return self.avatar.url

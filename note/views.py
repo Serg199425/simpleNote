@@ -6,9 +6,12 @@ from django.views.generic import TemplateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from note.models import Note
+from friends.models import Friendship
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
+from django.db.models import Q
+from IPython import embed
 
 class EditNoteView(FormView):
 	form_class = EditNoteForm
@@ -39,6 +42,12 @@ class IndexView(ListView):
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, request, *args, **kwargs):
 		return super(IndexView, self).dispatch(request, *args, **kwargs)
+	def get_context_data(self, **kwargs):
+		context = super(IndexView, self).get_context_data(**kwargs)
+	 	user = self.request.user
+	 	context['notes'] = Note.objects.filter(owner_id=user.id)
+	 	context['invitations_count'] = Friendship.objects.filter(Q(friend=user), confirmed=False).count
+	 	return context
 
 class DeleteView(DeleteView):
 	model = Note

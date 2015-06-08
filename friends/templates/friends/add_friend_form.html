@@ -1,16 +1,16 @@
 {% extends "index.html" %}
 {% block main_content %}
-	<h2>Account Editor</h2>
+	<h2>Add friend</h2>
 	<form method="post" action="" enctype="multipart/form-data">
 		<dl class="register">   
 			{% csrf_token %}
 			{% for field in form %}
-			    <div class="form-group">{{ field }}</div>
+			    <div class="form-group note-textarea-container">{{ field }}</div>
 			    {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
 			    {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
 			    </dd>
 			{% endfor %}
 		</dl>
-		<input type="submit" value="Change" class="clearfix btn btn-primary block full-width m-b small-button">
+		<input type="submit" value="Save" class="clearfix btn btn-primary block m-b small-button">
 	</form>
 {% endblock %}
