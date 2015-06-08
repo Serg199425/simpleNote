@@ -1,9 +1,9 @@
 {% extends "index.html" %}
 {% block main_content %}
-	<h2>Notes List</h2>
+	<h2>Shared Notes</h2>
 	<div class="row">
 		<div class="col-lg-12">
-            {% if notes.count > 0 %}
+            {% if shared_notes.count > 0 %}
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <div class="ibox-tools">
@@ -33,21 +33,15 @@
                         <th>Short Desc</th>
                         <th>Created At</th>
                         <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    	{% for note in notes %}
+                    	{% for shared_note in shared_notes %}
                     	    <tr class="gradeX">
-                    			<td>{{ note.title }}</td>
-                    			<td>{{ note.short_text }}</td>
-                    			<td>{{ note.date }}</td>
-                    			<td class="button-center"><a href="{% url 'note:show_note' note.id %}">Show</a></td>
-                                <td class="button-center"><a href="{% url 'note:share' note.id %}">Share</a></td>
-    		                    <td class="button-center"><a href="{% url 'note:edit_note' note.id %}">Edit</a></td>
-    		                    <td class="button-center"><a href="{% url 'note:delete_note' note.id %}">Delete</a></td>
+                    			<td>{{ shared_note.note.title }}</td>
+                    			<td>{{ shared_note.note.short_text }}</td>
+                    			<td>{{ shared_note.note.date }}</td>
+                    			<td class="button-center"><a href="{% url 'note:show_note' shared_note.note.id %}">Show</a></td>
                     		</tr>
     					{% endfor %}
                     </tbody>
@@ -56,9 +50,6 @@
                         <th>Title</th>
                         <th>Short Desc</th>
                         <th>Created At</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                         <th></th>
                     </tr>
                     </tfoot>
@@ -71,5 +62,4 @@
             {% endif %}
         </div>
     </div>
-	<a class="btn btn-sm btn-primary btn-block small-button" href="{% url 'note:add_note' %}">Add new</a>
 {% endblock %}

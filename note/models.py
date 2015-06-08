@@ -13,3 +13,10 @@ class Note(models.Model):
 		allow_image_upload=True
 	)
 	date = models.DateTimeField(auto_now_add=True, blank=True)
+
+class NoteShare(models.Model):
+	note = models.ForeignKey(Note)
+	user = models.ForeignKey(User)
+	class Meta:
+		unique_together = ('note', 'user',)
+		

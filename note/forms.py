@@ -9,3 +9,6 @@ class EditNoteForm(forms.ModelForm):
 		model = Note
 		widgets = { 'short_text': RedactorEditor(),}
 		fields = ['title','short_text']
+
+class ShareNoteForm(forms.Form):
+	email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control small-input','placeholder':"Email"}))

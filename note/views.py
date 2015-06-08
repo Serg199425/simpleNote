@@ -1,17 +1,18 @@
 from django.shortcuts import render
-from note.forms import EditNoteForm
+from note.forms import EditNoteForm, ShareNoteForm
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from note.models import Note
-from friends.models import Friendship
+from note.models import Note, NoteShare
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
+from friends.models import Friendship
 from django.db.models import Q
 from IPython import embed
+from django.contrib.auth.models import User
 
 class EditNoteView(FormView):
 	form_class = EditNoteForm
@@ -69,3 +70,39 @@ class ShowView(DetailView):
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, request, *args, **kwargs):
 		return super(ShowView, self).dispatch(request, *args, **kwargs)
+
+class ShareView(FormView):
+	form_class = ShareNoteForm
+	template_name = "note/share_note_form.html"
+	model = NoteShare
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(ShareView, self).dispatch(request, *args, **kwargs)
+	def form_valid(self, form):
+		email = form.cleaned_data['email']
+		if email != self.request.user.email:
+			try:
+				user = User.objects.get(email=email)
+				note = Note.objects.get(pk=self.kwargs['pk'])
+				NoteShare(note=note, user=user).save()
+				return HttpResponseRedirect(reverse('note:index'))
+			except:
+				return HttpResponseRedirect(reverse('note:index'))
+		else:
+			return HttpResponseRedirect(reverse('note:index'))
+
+class SharedNotesView(ListView):
+	template_name = "note/shared_notes.html"
+	model = NoteShare
+	context_object_name = 'notes'
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(SharedNotesView, self).dispatch(request, *args, **kwargs)
+	def get_context_data(self, **kwargs):
+		context = super(SharedNotesView, self).get_context_data(**kwargs)
+	 	user = self.request.user
+	 	context['shared_notes'] = NoteShare.objects.filter(user_id=user.id)
+	 	context['invitations_count'] = Friendship.objects.filter(Q(friend=user), confirmed=False).count
+	 	return context
+		
+		
