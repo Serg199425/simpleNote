@@ -1,0 +1,142 @@
+{% extends "index.html" %}
+{% block main_content %}
+    {% if invitations.count > 0 %}
+        <h2>Invitations</h2>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">Config option 1</a>
+                                </li>
+                                <li><a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                    <table class="table table-striped table-bordered table-hover dataTables-example" >
+                    <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for invitation in invitations %}
+                            <tr class="gradeX">
+                                <td>{{ invitation.group.name }}</td>
+                                <td>{{ invitation.group.creator.account.full_name }}</td>
+                                <td>{{ invitation.group.creator.email }}</td>
+                                <td class="button-center"><a href="{% url 'groups:accept' invitation.id %}">Accept</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                    </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+	<h2>Groups</h2>
+	<div class="row">
+		<div class="col-lg-12">
+            {% if created_groups.count != 0 or invitated_groups.count != 0 %}
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">Config option 1</a>
+                                </li>
+                                <li><a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                    <table class="table table-striped table-bordered table-hover dataTables-example" >
+                    <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Creator Name</th>
+                        <th>Creator Email</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    	{% for group in created_groups %}
+                    	    <tr class="gradeX">
+                                <td>{{ group.name }}</td>
+                    			<td>{{ group.creator.account.full_name }}</td>
+                    			<td>{{ group.creator.email }}</td>
+                                <td class="button-center"><a href="{% url 'groups:add_user' group.id %}">Add User</a></td>
+                                <td class="button-center"><a href="{% url 'groups:show_users' group.id %}">Show Users</a></td>
+    		                    <td class="button-center"><a href="{% url 'groups:delete' group.id %}">Delete</a></td>
+                    		</tr>
+    					{% endfor %}
+                        {% for invitated_group in invitated_groups %}
+                            <tr class="gradeX">
+                                <td>{{ invitated_group.group.name }}</td>
+                                <td>{{ invitated_group.user.account.full_name }}</td>
+                                <td>{{ invitated_group.user.email }}</td>
+                                <td></td>
+                                <td class="button-center"><a href="{% url 'groups:show_users' invitated_group.group.id %}">Show Users</a></td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Creator Name</th>
+                        <th>Creator Email</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                    </table>
+
+                    </div>
+                </div>
+            {% else %}
+                <h3>Groups not found</h3>
+            {% endif %}
+        </div>
+    </div>
+	<a class="btn btn-sm btn-primary btn-block small-button" href="{% url 'groups:add' %}">Add new</a>
+{% endblock %}

@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'account',
     'redactor',
     'note',
-    'friends'
+    'friends',
+    'groups',
 )
 
 MIDDLEWARE_CLASSES = (

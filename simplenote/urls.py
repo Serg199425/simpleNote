@@ -9,6 +9,7 @@ urlpatterns = [
 	url(r'^', include('account.urls', namespace="account")),
 	url(r'^', include('note.urls', namespace="note")),
     url(r'^', include('friends.urls', namespace="friends")),
+    url(r'^', include('groups.urls', namespace="groups")),
     url(r'^', include('registration.auth_urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)$',
