@@ -34,8 +34,12 @@ class EditNoteView(UpdateView):
 	def form_valid(self, form):
 		try:
 			note = Note.objects.get(pk=self.kwargs['pk'])
-			note.save_with_users_and_groups(form.cleaned_data)
-		except:
+			data = form.cleaned_data
+			note.title = data['title']
+			note.short_text = data['short_text']
+			note.save()
+			note.save_users_and_groups(data['users'], data['groups'])
+		except KeyError:
 			data = form.cleaned_data
 			note = Note(owner=self.request.user, title=data['title'], short_text=data['short_text'])
 			note.save()

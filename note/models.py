@@ -19,13 +19,9 @@ class Note(models.Model):
 	date = models.DateTimeField(auto_now_add=True, blank=True)
 	groups = models.ManyToManyField(Group, through='NoteGroup')
 	users = models.ManyToManyField(User, through='NoteUser')
-	def save_with_groups(self, data):
-		self.title = data['title']
-		self.short_text = data['short_text']
-		self.save()
-		self.notegroup_set.all().delete()
-		save_users_and_groups(data['users'].all(), data['groups'].all())
 	def save_users_and_groups(self, users, groups):
+		self.notegroup_set.all().delete()
+		self.notegroup_set.all().delete()
 		for user in users:
 			NoteUser(note=self, user=user).save()
 		for group in groups:
