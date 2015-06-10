@@ -16,4 +16,5 @@ urlpatterns = [
             'django.views.static.serve',
             {'document_root': settings.MEDIA_ROOT, }),
     url(r'^redactor/', include('redactor.urls')),
+    url(r'^select2/', include('django_select2.urls')),
 ]

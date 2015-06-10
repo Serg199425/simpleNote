@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.views.generic.list import ListView
 from friends.models import Friendship
 from django.db.models import Q
-from groups.forms import *
+from groups.forms import AddGroupForm, AddUserToGroupForm
 from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required

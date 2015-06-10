@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from note.forms import EditNoteForm, ShareNoteForm
+from note.forms import EditNoteForm
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from note.models import Note, NoteShare
+from note.models import Note, NoteUser, NoteGroup
+from groups.models import Group
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
@@ -13,28 +14,34 @@ from friends.models import Friendship
 from django.db.models import Q
 from IPython import embed
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from django.views.generic.edit import UpdateView
 
-class EditNoteView(FormView):
+class EditNoteView(UpdateView):
 	form_class = EditNoteForm
 	template_name = "note/add_note_form.html"
 	model = Note
-	def get_initial(self):
-		user = self.request.user
-		try:
-			note = Note.objects.get(pk=self.kwargs['pk'])
-			return {'title': note.title, 'short_text': note.short_text }
+	def get_object(self):
+		try: 
+			return get_object_or_404(Note, pk=self.kwargs['pk'])
 		except:
 			return
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, request, *args, **kwargs):
 		return super(EditNoteView, self).dispatch(request, *args, **kwargs)
+	def get_success_url(self):
+		return reverse('note:index')
 	def form_valid(self, form):
-		short_text = form.cleaned_data['short_text']
-		title = form.cleaned_data['short_text']
-		user = self.request.user
-		note = Note(owner=user, title=title, short_text=short_text)
-		note.save()
+		try:
+			note = Note.objects.get(pk=self.kwargs['pk'])
+			note.save_with_users_and_groups(form.cleaned_data)
+		except:
+			data = form.cleaned_data
+			note = Note(owner=self.request.user, title=data['title'], short_text=data['short_text'])
+			note.save()
+			note.save_users_and_groups(data['users'], data['groups'])
 		return HttpResponseRedirect(reverse('note:index'))
+
 
 class IndexView(ListView):
 	template_name = "note/index.html"
@@ -71,29 +78,9 @@ class ShowView(DetailView):
 	def dispatch(self, request, *args, **kwargs):
 		return super(ShowView, self).dispatch(request, *args, **kwargs)
 
-class ShareView(FormView):
-	form_class = ShareNoteForm
-	template_name = "note/share_note_form.html"
-	model = NoteShare
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(ShareView, self).dispatch(request, *args, **kwargs)
-	def form_valid(self, form):
-		email = form.cleaned_data['email']
-		if email != self.request.user.email:
-			try:
-				user = User.objects.get(email=email)
-				note = Note.objects.get(pk=self.kwargs['pk'])
-				NoteShare(note=note, user=user).save()
-				return HttpResponseRedirect(reverse('note:index'))
-			except:
-				return HttpResponseRedirect(reverse('note:index'))
-		else:
-			return HttpResponseRedirect(reverse('note:index'))
-
 class SharedNotesView(ListView):
 	template_name = "note/shared_notes.html"
-	model = NoteShare
+	model = NoteUser
 	context_object_name = 'notes'
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, request, *args, **kwargs):
@@ -101,7 +88,7 @@ class SharedNotesView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(SharedNotesView, self).get_context_data(**kwargs)
 	 	user = self.request.user
-	 	context['shared_notes'] = NoteShare.objects.filter(user_id=user.id)
+	 	context['shared_notes'] = NoteUser.objects.filter(user_id=user.id)
 	 	context['invitations_count'] = Friendship.objects.filter(Q(friend=user), confirmed=False).count
 	 	return context
 		

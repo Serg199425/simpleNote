@@ -35,7 +35,6 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,7 +44,6 @@
                     			<td>{{ note.short_text }}</td>
                     			<td>{{ note.date }}</td>
                     			<td class="button-center"><a href="{% url 'note:show_note' note.id %}">Show</a></td>
-                                <td class="button-center"><a href="{% url 'note:share' note.id %}">Share</a></td>
     		                    <td class="button-center"><a href="{% url 'note:edit_note' note.id %}">Edit</a></td>
     		                    <td class="button-center"><a href="{% url 'note:delete_note' note.id %}">Delete</a></td>
                     		</tr>
@@ -56,7 +54,6 @@
                         <th>Title</th>
                         <th>Short Desc</th>
                         <th>Created At</th>
-                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>

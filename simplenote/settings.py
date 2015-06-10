@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'note',
     'friends',
     'groups',
+    'django_select2',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -128,7 +129,6 @@ STATICFILES_DIRS = (
     '/styles/',
     '/fonts/',
 )
-
 STATIC_DOC_ROOT = 'media/'
 MEDIA_ROOT = 'media/'
 MEDIA_URL = '/media/'

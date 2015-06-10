@@ -2,6 +2,7 @@
 <html>
 <head>
     {% load staticfiles %}
+    {% load django_select2_tags %}
     {% load bootstrap3 %}
     {% bootstrap_css %}
     <meta charset="utf-8">
@@ -10,6 +11,10 @@
     <link href="/static/styles/font-awesome.css" rel="stylesheet">
     <link href="/static/styles/style.css" rel="stylesheet">
     <script src="/static/js/jquery-2.1.1.js"></script>
+    {% import_django_select2_js %}
+    {% import_django_select2_css %}
+    <!-- For testing importing it again, but with another tag and light=1 -->
+    {% import_django_select2_js_css light=1 %}
     {% bootstrap_javascript %}
     <script src="/static/js/jquery.metisMenu.js"></script>
     <script src="/static/js/inspinia.js"></script>

@@ -5,6 +5,8 @@ class Group(models.Model):
 	creator = models.ForeignKey(User)
 	name = models.CharField(max_length=250, verbose_name=u'Name')
 	date = models.DateTimeField(auto_now_add=True, blank=True)
+	def __unicode__(self):
+		return self.name
 
 class GroupUser(models.Model):
 	group = models.ForeignKey(Group)

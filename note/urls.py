@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from note.views import IndexView, EditNoteView, ShowView, DeleteView, ShareView, SharedNotesView
+from note.views import IndexView, EditNoteView, ShowView, DeleteView, SharedNotesView
 from note import views
 
 urlpatterns = patterns('',
@@ -8,6 +8,5 @@ urlpatterns = patterns('',
     url(r'^note/show/(?P<pk>\d+)$', ShowView.as_view(), name='show_note'),
     url(r'^note/edit/(?P<pk>\d+)$', EditNoteView.as_view(), name='edit_note'),
     url(r'^note/delete/(?P<pk>\d+)$', DeleteView.as_view(), name='delete_note'),
-    url(r'^note/share/(?P<pk>\d+)$', ShareView.as_view(), name='share'),
     url(r'^note/shared/$', SharedNotesView.as_view(), name='shared'),
 )
