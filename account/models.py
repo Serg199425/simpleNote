@@ -10,7 +10,8 @@ class Account(models.Model):
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
 	avatar = models.ImageField(default='image.jpg')
-
+	def __unicode__(self):
+		return self.full_name()
 	def full_name(self):
 		return self.first_name + " " + self.last_name
 

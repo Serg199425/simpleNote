@@ -1,9 +1,9 @@
 {% extends "index.html" %}
 {% block main_content %}
-	<h2>Shared Notes</h2>
+	<h2>Favorite Notes</h2>
 	<div class="row">
 		<div class="col-lg-12">
-            {% if shared_notes.count > 0 %}
+            {% if notes.count > 0 %}
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <div class="ibox-tools">
@@ -34,19 +34,24 @@
                         <th>Created At</th>
                         <th></th>
                         <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    	{% for note in shared_notes %}
+                    	{% for note in notes %}
                     	    <tr class="gradeX">
                     			<td>{{ note.title }}</td>
                     			<td>{{ note.short_text }}</td>
                     			<td>{{ note.date }}</td>
                     			<td class="button-center"><a href="{% url 'note:show_note' note.id %}">Show</a></td>
-                                {% if note in favorite_notes %}
-                                    <td class="button-center"><a href="{% url 'note:remove_favorite' note.id %}">Remove from Favorites</a></td>
+                                <td class="button-center"><a href="{% url 'note:remove_favorite' note.id %}">Remove from Favorites</a></td>
+                                {% if note.owner = user %}
+                                    <td class="button-center"><a href="{% url 'note:edit_note' note.id %}">Edit</a></td>
+                                    <td class="button-center"><a href="{% url 'note:delete_note' note.id %}">Delete</a></td>
                                 {% else %}
-                                    <td class="button-center"><a href="{% url 'note:add_favorite' note.id %}">Add to Favorites</a></td>
+                                    <td class="button-center"><a href="{% url 'note:edit_note' note.id %}"></a></td>
+                                    <td class="button-center"><a href="{% url 'note:delete_note' note.id %}"></a></td>
                                 {% endif %}
                     		</tr>
     					{% endfor %}
@@ -56,6 +61,8 @@
                         <th>Title</th>
                         <th>Short Desc</th>
                         <th>Created At</th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>

@@ -19,6 +19,7 @@ class Note(models.Model):
 	date = models.DateTimeField(auto_now_add=True, blank=True)
 	groups = models.ManyToManyField(Group, through='NoteGroup')
 	users = models.ManyToManyField(User, through='NoteUser')
+	favorite_users = models.ManyToManyField(User, through='FavoriteNote', related_name='favorite_notes')
 	def save_users_and_groups(self, users, groups):
 		self.notegroup_set.all().delete()
 		self.noteuser_set.all().delete()
@@ -38,4 +39,10 @@ class NoteGroup(models.Model):
 	group = models.ForeignKey(Group)
 	class Meta:
 		unique_together = ('group', 'note',)
+
+class FavoriteNote(models.Model):
+	note = models.ForeignKey(Note)
+	user = models.ForeignKey(User)
+	class Meta:
+		unique_together = ('user', 'note')
 		

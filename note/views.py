@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from note.forms import EditNoteForm
-from django.views.generic.edit import FormView
+from django.views.generic.base import RedirectView
+from django.views.generic.edit import FormView, UpdateView
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from note.models import Note, NoteUser, NoteGroup
+from note.models import Note, NoteUser, NoteGroup, FavoriteNote
 from groups.models import Group
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -14,7 +15,6 @@ from django.db.models import Q
 from IPython import embed
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django.views.generic.edit import UpdateView
 
 class EditNoteView(UpdateView):
 	form_class = EditNoteForm
@@ -57,6 +57,7 @@ class IndexView(ListView):
 		context = super(IndexView, self).get_context_data(**kwargs)
 	 	user = self.request.user
 	 	context['notes'] = Note.objects.filter(owner_id=user.id)
+	 	context['favorite_notes'] = user.favorite_notes.all()
 	 	return context
 
 class DeleteView(DeleteView):
@@ -91,6 +92,42 @@ class SharedNotesView(ListView):
 		context = super(SharedNotesView, self).get_context_data(**kwargs)
 	 	user = self.request.user
 	 	context['shared_notes'] = user.account.shared_notes()
+	 	context['favorite_notes'] = self.request.user.favorite_notes.all()
+	 	return context
+
+class AddFavoriteView(RedirectView):
+	permanent = False
+	query_string = False
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(AddFavoriteView, self).dispatch(request, *args, **kwargs)
+	def get_redirect_url(self, pk):
+		note = get_object_or_404(Note, pk=pk)
+		FavoriteNote(note_id=note.id, user_id=self.request.user.id).save()
+		return reverse('note:favorite_index')
+
+class RemoveFavoriteView(DeleteView):
+	model = FavoriteNote
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(RemoveFavoriteView, self).dispatch(request, *args, **kwargs)
+	def delete(self, request, *args, **kwargs):
+		delete_object = FavoriteNote.objects.get(note_id=kwargs['pk'], user_id=self.request.user.id)
+		delete_object.delete()
+		return HttpResponseRedirect(reverse('note:favorite_index'))
+	def get(self, *args, **kwargs):
+		return self.post(*args, **kwargs)
+
+class FavoriteIndexView(ListView):
+	template_name = "note/favorite_index.html"
+	model = FavoriteNote
+	context_object_name = 'favorite_notes'
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, request, *args, **kwargs):
+		return super(FavoriteIndexView, self).dispatch(request, *args, **kwargs)
+	def get_context_data(self, **kwargs):
+		context = super(FavoriteIndexView, self).get_context_data(**kwargs)
+	 	context['notes'] = self.request.user.favorite_notes.all()
 	 	return context
 		
 		

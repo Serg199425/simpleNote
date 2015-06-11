@@ -35,6 +35,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -44,6 +45,11 @@
                     			<td>{{ note.short_text }}</td>
                     			<td>{{ note.date }}</td>
                     			<td class="button-center"><a href="{% url 'note:show_note' note.id %}">Show</a></td>
+                                {% if note in favorite_notes %}
+                                    <td class="button-center"><a href="{% url 'note:remove_favorite' note.id %}">Remove from Favorites</a></td>
+                                {% else %}
+                                    <td class="button-center"><a href="{% url 'note:add_favorite' note.id %}">Add to Favorites</a></td>
+                                {% endif %}
     		                    <td class="button-center"><a href="{% url 'note:edit_note' note.id %}">Edit</a></td>
     		                    <td class="button-center"><a href="{% url 'note:delete_note' note.id %}">Delete</a></td>
                     		</tr>
@@ -54,6 +60,7 @@
                         <th>Title</th>
                         <th>Short Desc</th>
                         <th>Created At</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
