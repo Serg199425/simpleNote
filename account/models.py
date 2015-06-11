@@ -27,6 +27,11 @@ class Account(models.Model):
 	def invitations(self):
 		return Friendship.objects.filter(friend_id=self.user_id, confirmed=False)
 
+	def shared_notes(self):
+		groups = self.user.groups
+		notes_ids = list(chain(Friendship.objects.filter(creator_id=self.user_id, confirmed=True).values_list('friend'),
+					Friendship.objects.filter(friend_id=self.user_id, confirmed=True).values_list('creator')))
+
 class Friendship(models.Model):
 	created = models.DateTimeField(auto_now_add=True, editable=False)
 	creator = models.ForeignKey(User, related_name="friendship_creator_set")
@@ -34,7 +39,6 @@ class Friendship(models.Model):
 	confirmed = models.BooleanField(blank=True)
 	class Meta:
 		unique_together = ('creator', 'friend',)
-		auto_created = True
 	def get(self, user_id, current_user_id):
 		friendship = Friendship.objects.filter(creator_id=user_id, friend_id=current_user_id)
 		friendship |= Friendship.objects.filter(creator_id=current_user_id, friend_id=user_id)

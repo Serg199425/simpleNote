@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from IPython import embed
 
 class UserChoices(AutoModelSelect2MultipleField):
-	required=False
 	queryset = User.objects
 	search_fields = ['email__icontains', ]
 	def get_results(self, request, term, page, context):
@@ -16,8 +15,7 @@ class UserChoices(AutoModelSelect2MultipleField):
 		return NO_ERR_RESP, False, res
 
 class GroupChoices(AutoModelSelect2MultipleField):
-	required=False
-	queryset = User.objects
+	queryset = Group.objects
 	search_fields = ['name__icontains', ]
 	def get_results(self, request, term, page, context):
 		res = [(g.id, g.name) for g in request.user.group_set.all().filter(name__icontains=term)]
@@ -25,8 +23,8 @@ class GroupChoices(AutoModelSelect2MultipleField):
 
 class EditNoteForm(forms.ModelForm):
 	title = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control small-input','placeholder':"Title"}))
-	groups = GroupChoices(widget=AutoHeavySelect2MultipleWidget(attrs={'placeholder':'Share for Groups'}))
-	users = UserChoices(widget=AutoHeavySelect2MultipleWidget(attrs={'placeholder':'Share for Users'}))
+	groups = GroupChoices(required=False, widget=AutoHeavySelect2MultipleWidget(attrs={'placeholder':'Share for Groups'}))
+	users = UserChoices(required=False, widget=AutoHeavySelect2MultipleWidget(attrs={'placeholder':'Share for Users'}))
 	class Meta:
 		model = Note
 		widgets = { 'short_text': RedactorEditor(),}
