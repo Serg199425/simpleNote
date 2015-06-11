@@ -36,12 +36,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    	{% for shared_note in shared_notes %}
+                    	{% for note in shared_notes %}
                     	    <tr class="gradeX">
-                    			<td>{{ shared_note.note.title }}</td>
-                    			<td>{{ shared_note.note.short_text }}</td>
-                    			<td>{{ shared_note.note.date }}</td>
-                    			<td class="button-center"><a href="{% url 'note:show_note' shared_note.note.id %}">Show</a></td>
+                    			<td>{{ note.title }}</td>
+                    			<td>{{ note.short_text }}</td>
+                    			<td>{{ note.date }}</td>
+                    			<td class="button-center"><a href="{% url 'note:show_note' note.id %}">Show</a></td>
                     		</tr>
     					{% endfor %}
                     </tbody>

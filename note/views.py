@@ -90,7 +90,7 @@ class SharedNotesView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(SharedNotesView, self).get_context_data(**kwargs)
 	 	user = self.request.user
-	 	context['shared_notes'] = NoteUser.objects.filter(user_id=user.id)
+	 	context['shared_notes'] = user.account.shared_notes()
 	 	return context
 		
 		
