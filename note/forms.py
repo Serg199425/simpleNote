@@ -6,12 +6,25 @@ from groups.models import Group
 from django_select2 import *
 from django.contrib.auth.models import User
 
+class UserChoices(AutoModelSelect2Field):
+	queryset = User.objects
+	search_fields = ['email__icontains', ]
+	def get_results(self, request, term, page, context):
+		res = [(v.id, v.email) for v in User.objects.filter(email__icontains=term).exclude(id=request.user.id)]
+		return NO_ERR_RESP, False, res
+
+class GroupsChoices(AutoModelSelect2Field):
+	queryset = User.objects
+	search_fields = ['name__icontains', ]
+	def get_results(self, request, term, page, context):
+		res = [(v.id, v.email) for v in User.objects.filter(name__icontains=term).exclude(id=request.user.id)]
+		return NO_ERR_RESP, False, res
+
 class EditNoteForm(forms.ModelForm):
 	title = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control small-input','placeholder':"Title"}))
 	groups = ModelSelect2MultipleField(queryset=Group.objects, required=False, 
 		widget=Select2MultipleWidget(attrs={'placeholder':'Share for Groups'}))
-	users = ModelSelect2MultipleField(queryset=User.objects, required=False, 
-		widget=Select2MultipleWidget(attrs={'placeholder':'Share for Users'}))
+	users = UserChoices(required=False, widget=AutoHeavySelect2MultipleWidget(attrs={'placeholder':'Share for Users'}))
 	class Meta:
 		model = Note
 		widgets = { 'short_text': RedactorEditor(),}

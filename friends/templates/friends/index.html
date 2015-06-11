@@ -60,7 +60,7 @@
 	<h2>Friends</h2>
 	<div class="row">
 		<div class="col-lg-12">
-            {% if creator_friends.count != 0 or invitated_friends.count != 0 %}
+            {% if friends|length > 0 %}
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <div class="ibox-tools">
@@ -92,20 +92,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    	{% for friendship in creator_friends %}
+                    	{% for user in friends %}
                     	    <tr class="gradeX">
-                    			<td>{{ friendship.creator.account.full_name }}</td>
-                    			<td>{{ friendship.creator.email }}</td>
-    		                    <td class="button-center"><a href="{% url 'friends:delete' friendship.id %}">Delete</a></td>
+                    			<td>{{ user.account.full_name }}</td>
+                    			<td>{{ user.email }}</td>
+    		                    <td class="button-center"><a href="{% url 'friends:delete' user.id %}">Delete</a></td>
                     		</tr>
     					{% endfor %}
-                        {% for friendship in invitated_friends %}
-                            <tr class="gradeX">
-                                <td>{{ friendship.friend.account.full_name }}</td>
-                                <td>{{ friendship.friend.email }}</td>
-                                <td class="button-center"><a href="{% url 'friends:delete' friendship.id %}">Delete</a></td>
-                            </tr>
-                        {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>

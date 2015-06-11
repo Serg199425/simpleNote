@@ -22,9 +22,8 @@ class IndexView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
 		user = self.request.user
-		context['creator_friends'] = Friendship.objects.filter(Q(friend=user), confirmed=True)
-		context['invitated_friends'] = Friendship.objects.filter(Q(creator=user), confirmed=True)
-		context['invitations'] = Friendship.objects.filter(Q(friend=user), confirmed=False)
+		context['friends'] = user.account.friends()
+		context['invitations'] = user.account.invitations()
 		return context
 
 class AddFriendView(FormView):
@@ -57,7 +56,7 @@ class DeleteView(DeleteView):
 	def dispatch(self, request, *args, **kwargs):
 		return super(DeleteView, self).dispatch(request, *args, **kwargs)
 	def delete(self, request, *args, **kwargs):
-		delete_object = Friendship.objects.get(pk=kwargs['pk'])
+		delete_object = Friendship().get(user_id=kwargs['pk'], current_user_id=self.request.user.id)
 		if delete_object is not None:
 			delete_object.delete()
 		return HttpResponseRedirect(reverse('friends:index'))
