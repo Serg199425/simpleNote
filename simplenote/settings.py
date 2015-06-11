@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'note',
     'friends',
     'groups',
+    'content_pages',
     'django_select2',
 )
 
