@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from friendship.models import Friend, Follow
 from django.views.generic.list import ListView
-from friends.models import Friendship
+from account.models import Friendship
 from django.db.models import Q
 from friends.forms import *
 from django.views.generic.edit import FormView
@@ -15,6 +14,7 @@ from django.views.generic.base import RedirectView
 from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic import DeleteView
+from django.db import IntegrityError
 
 class IndexView(ListView):
 	model = Friendship
@@ -35,17 +35,11 @@ class AddFriendView(FormView):
 	def dispatch(self, request, *args, **kwargs):
 		return super(AddFriendView, self).dispatch(request, *args, **kwargs)
 	def form_valid(self, form):
-		email = form.cleaned_data['email']
-		if email != self.request.user.email:
-			try:
-				user = User.objects.get(email=email)
-				friendship = Friendship(creator=self.request.user, friend=user, confirmed=False)
-				friendship.save()
-				return HttpResponseRedirect(reverse('friends:index'))
-			except:
-				return HttpResponseRedirect(reverse('friends:add_friend'))
-		else:
-			return HttpResponseRedirect(reverse('friends:add_friend'))
+		try:
+			Friendship(creator=self.request.user, friend=form.cleaned_data['friend'], confirmed=False).save()
+		except IntegrityError:
+			pass
+		return HttpResponseRedirect(reverse('friends:index'))
 
 class AcceptView(RedirectView):
 	permanent = False

@@ -32,13 +32,10 @@ class NoteUser(models.Model):
 	user = models.ForeignKey(User)
 	class Meta:
 		unique_together = ('user', 'note')
-		db_table = 'note_note_users'
-		auto_created = True
 
 class NoteGroup(models.Model):
 	note = models.ForeignKey(Note)
 	group = models.ForeignKey(Group)
 	class Meta:
 		unique_together = ('group', 'note',)
-        auto_created = True
 		

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.views.generic.list import ListView
-from friends.models import Friendship
+from account.models import Friendship
 from django.db.models import Q
 from groups.forms import AddGroupForm, AddUserToGroupForm
 from django.views.generic.edit import FormView
@@ -23,9 +23,9 @@ class IndexView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
 		user = self.request.user
-		context['created_groups'] = Group.objects.filter(Q(creator=user))
-		context['invitated_groups'] = GroupUser.objects.filter(Q(user=user), confirmed=True)
-		context['invitations'] = GroupUser.objects.filter(Q(user=user), confirmed=False)
+		context['created_groups'] = Group.objects.filter(creator_id=user.id)
+		context['invitated_groups'] = GroupUser.objects.filter(user_id=user.id, confirmed=True)
+		context['invitations'] = GroupUser.objects.filter(user_id=user.id, confirmed=False)
 		return context
 
 class AddView(FormView):
@@ -50,8 +50,7 @@ class AddUserToGroupView(FormView):
 	def form_valid(self, form):
 		try:
 			group = Group.objects.get(pk=self.kwargs['pk'])
-			user = User.objects.get(email=form.cleaned_data['email'])
-			GroupUser(group_id=group.id, user_id=user.id).save()
+			GroupUser(group_id=group.id, user_id=form.cleaned_data['user'].id).save()
 			return HttpResponseRedirect(reverse('groups:index'))
 		except Group.DoesNotExist:
 			return HttpResponseRedirect(reverse('groups:index'))

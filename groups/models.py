@@ -2,10 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Group(models.Model):
-	creator = models.ForeignKey(User)
-	name = models.CharField(max_length=250, verbose_name=u'Name')
+	creator = models.ForeignKey(User, related_name='group_creator')
+	name = models.CharField(max_length=250)
 	date = models.DateTimeField(auto_now_add=True, blank=True)
-	def __unicode__(self):
+	users = models.ManyToManyField(User, through='GroupUser')
+	def __str__(self):
 		return self.name
 
 class GroupUser(models.Model):

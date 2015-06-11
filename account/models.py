@@ -17,3 +17,12 @@ class Account(models.Model):
 			return "/media/image.jpg"
 		else:
 			return self.avatar.url
+
+class Friendship(models.Model):
+	created = models.DateTimeField(auto_now_add=True, editable=False)
+	creator = models.ForeignKey(User, related_name="friendship_creator_set")
+	friend = models.ForeignKey(User, related_name="friend_set")
+	confirmed = models.BooleanField(blank=True)
+	class Meta:
+		unique_together = ('creator', 'friend',)
+        auto_created = True

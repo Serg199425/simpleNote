@@ -2,13 +2,12 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('account', '0001_initial'),
     ]
 
     operations = [
@@ -16,21 +15,31 @@ class Migration(migrations.Migration):
             name='Group',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=250, verbose_name='Name')),
+                ('name', models.CharField(max_length=250)),
                 ('date', models.DateTimeField(auto_now_add=True)),
-                ('creator', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
-            name='GroupUser',
+            name='GroupAccount',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('confirmed', models.BooleanField(default=False)),
+                ('account', models.ForeignKey(to='account.Account')),
                 ('group', models.ForeignKey(to='groups.Group')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.AddField(
+            model_name='group',
+            name='accounts',
+            field=models.ManyToManyField(to='account.Account', through='groups.GroupAccount'),
+        ),
+        migrations.AddField(
+            model_name='group',
+            name='creator',
+            field=models.ForeignKey(related_name='group_creator', to='account.Account'),
+        ),
         migrations.AlterUniqueTogether(
-            name='groupuser',
-            unique_together=set([('group', 'user')]),
+            name='groupaccount',
+            unique_together=set([('group', 'account')]),
         ),
     ]

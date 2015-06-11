@@ -10,7 +10,6 @@ from groups.models import Group
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
-from friends.models import Friendship
 from django.db.models import Q
 from IPython import embed
 from django.contrib.auth.models import User
@@ -58,7 +57,6 @@ class IndexView(ListView):
 		context = super(IndexView, self).get_context_data(**kwargs)
 	 	user = self.request.user
 	 	context['notes'] = Note.objects.filter(owner_id=user.id)
-	 	context['invitations_count'] = Friendship.objects.filter(Q(friend=user), confirmed=False).count
 	 	return context
 
 class DeleteView(DeleteView):
@@ -93,7 +91,6 @@ class SharedNotesView(ListView):
 		context = super(SharedNotesView, self).get_context_data(**kwargs)
 	 	user = self.request.user
 	 	context['shared_notes'] = NoteUser.objects.filter(user_id=user.id)
-	 	context['invitations_count'] = Friendship.objects.filter(Q(friend=user), confirmed=False).count
 	 	return context
 		
 		
