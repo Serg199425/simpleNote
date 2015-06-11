@@ -12,6 +12,7 @@ class Group(models.Model):
 class GroupUser(models.Model):
 	group = models.ForeignKey(Group)
 	user = models.ForeignKey(User)
+	is_creator = models.BooleanField(default=False)
 	confirmed = models.BooleanField(default=False)
 	class Meta:
 		unique_together = ('group', 'user',)

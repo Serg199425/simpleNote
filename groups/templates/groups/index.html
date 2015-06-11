@@ -63,7 +63,7 @@
 	<h2>Groups</h2>
 	<div class="row">
 		<div class="col-lg-12">
-            {% if created_groups.count != 0 or invitated_groups.count != 0 %}
+            {% if group_users.count > 0 %}
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <div class="ibox-tools">
@@ -98,26 +98,21 @@
                     </tr>
                     </thead>
                     <tbody>
-                    	{% for group in created_groups %}
+                    	{% for group_user in group_users %}
                     	    <tr class="gradeX">
-                                <td>{{ group.name }}</td>
-                    			<td>{{ group.creator.account.full_name }}</td>
-                    			<td>{{ group.creator.email }}</td>
-                                <td class="button-center"><a href="{% url 'groups:add_user' group.id %}">Add User</a></td>
-                                <td class="button-center"><a href="{% url 'groups:show_users' group.id %}">Show Users</a></td>
-    		                    <td class="button-center"><a href="{% url 'groups:delete' group.id %}">Delete</a></td>
+                                <td>{{ group_user.group.name }}</td>
+                    			<td>{{ group_user.group.creator.account.full_name }}</td>
+                    			<td>{{ group_user.group.creator.email }}</td>
+                                <td class="button-center"><a href="{% url 'groups:show_users' group_user.group.id %}">Show Users</a></td>
+                                {% if group_user.is_creator %}
+                                    <td class="button-center"><a href="{% url 'groups:add_user' group_user.group.id %}">Add User</a></td>
+                                    <td class="button-center"><a href="{% url 'groups:delete' group_user.group.id %}">Delete</a></td>
+                                {% else %}
+                                    <td></td>
+                                    <td></td>
+                                {% endif %}
                     		</tr>
     					{% endfor %}
-                        {% for invitated_group in invitated_groups %}
-                            <tr class="gradeX">
-                                <td>{{ invitated_group.group.name }}</td>
-                                <td>{{ invitated_group.user.account.full_name }}</td>
-                                <td>{{ invitated_group.user.email }}</td>
-                                <td></td>
-                                <td class="button-center"><a href="{% url 'groups:show_users' invitated_group.group.id %}">Show Users</a></td>
-                                <td></td>
-                            </tr>
-                        {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>

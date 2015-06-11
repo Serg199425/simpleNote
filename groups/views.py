@@ -23,8 +23,7 @@ class IndexView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
 		user = self.request.user
-		context['created_groups'] = Group.objects.filter(creator_id=user.id)
-		context['invitated_groups'] = GroupUser.objects.filter(user_id=user.id, confirmed=True)
+		context['group_users'] = GroupUser.objects.filter(user_id=user.id, confirmed=True)
 		context['invitations'] = GroupUser.objects.filter(user_id=user.id, confirmed=False)
 		return context
 
@@ -36,7 +35,9 @@ class AddView(FormView):
 	def dispatch(self, request, *args, **kwargs):
 		return super(AddView, self).dispatch(request, *args, **kwargs)
 	def form_valid(self, form):
-		Group(name=form.cleaned_data['name'], creator_id=self.request.user.id).save()
+		group = Group(name=form.cleaned_data['name'], creator_id=self.request.user.id)
+		group.save()
+		GroupUser(group_id=group.id, user_id=self.request.user.id, confirmed=True, is_creator=True).save()
 		return HttpResponseRedirect(reverse('groups:index'))
 
 

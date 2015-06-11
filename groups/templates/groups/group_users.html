@@ -35,26 +35,33 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr class="gradeX">
-                            <td>{{ current_group.creator.account.full_name}} (Creator)</td>
-                            <td>{{ current_group.creator.email }}</td>
-                            <td class="button-center"></td>
-                        </tr>
                         {% if group_users.count > 0%}
                             {% if user.email == current_group.creator.email %}
                             	{% for group_user in group_users %}
-                            	    <tr class="gradeX">
-                            			<td>{{ group_user.user.account.full_name }}</td>
-                            			<td>{{ group_user.user.email }}</td>
-                                        <td class="button-center"><a href="{% url 'groups:delete_user' group_user.id %}">Delete</a></td>
-                            		</tr>
+                                    {% if group_user.is_creator %}
+                                        <tr class="gradeX">
+                                            <td>{{ group_user.user.account.full_name }} (Creator)</td>
+                                            <td>{{ group_user.user.email }}</td>
+                                            <td class="button-center"></td>
+                                        </tr>
+                                    {% else %}
+                                        <tr class="gradeX">
+                                            <td>{{ group_user.user.account.full_name }}</td>
+                                            <td>{{ group_user.user.email }}</td>
+                                            <td class="button-center"><a href="{% url 'groups:delete_user' group_user.id %}">Delete</a></td>
+                                        </tr>
+                                    {% endif %}
             					{% endfor %}
                             {% else %}
                                 {% for group_user in group_users %}
                                     <tr class="gradeX">
                                         <td>{{ group_user.user.account.full_name }}</td>
                                         <td>{{ group_user.user.email }}</td>
-                                        <td class="button-center"></td>
+                                        {% if user.email == group_user.user.email %}
+                                            <td class="button-center"><a href="{% url 'groups:delete_user' group_user.id %}">Delete</a></td>
+                                        {% else %}
+                                            <td class="button-center"></td>
+                                        {% endif %}
                                     </tr>
                                 {% endfor %}
                             {% endif %}
