@@ -23,7 +23,7 @@ class Account(models.Model):
 	def friends(self):
 		friends_ids = list(chain(Friendship.objects.filter(creator_id=self.user_id, confirmed=True).values_list('friend'),
 					Friendship.objects.filter(friend_id=self.user_id, confirmed=True).values_list('creator')))
-		if friends_ids != []:
+		if friends_ids:
 			friends_ids = zip(*friends_ids)[0]
 		return User.objects.filter(id__in=friends_ids)
 	def invitations(self):
@@ -31,11 +31,11 @@ class Account(models.Model):
 
 	def shared_notes(self):
 		groups_ids = self.user.groupuser_set.all().filter(confirmed=True).values_list('group')
-		if groups_ids != []:
+		if groups_ids:
 			groups_ids = zip(*groups_ids)[0]
 		notes_ids = list(chain(NoteUser.objects.filter(user_id=self.user_id).values_list('note'),
 					NoteGroup.objects.filter(group_id__in=groups_ids).values_list('note')))
-		if notes_ids != []:
+		if notes_ids:
 			notes_ids = zip(*notes_ids)[0]
 		return Note.objects.filter(id__in=notes_ids).exclude(owner_id=self.user.id)
 

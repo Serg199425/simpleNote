@@ -57,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'privateviews.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'simplenote.urls'
@@ -136,3 +137,17 @@ SITE_ID = 2
 
 REDACTOR_OPTIONS = {'lang': 'en'}
 REDACTOR_UPLOAD = 'uploads/'
+
+PUBLIC_VIEWS = [
+    'django.contrib.auth.views.password_reset_done',
+    'django.contrib.auth.views.password_reset',
+    'django.contrib.auth.views.password_reset_confirm',
+    'django.contrib.auth.views.password_reset_complete',
+]
+
+PUBLIC_PATHS = [
+    '^/login/$',
+    '^/register/$',
+]
+
+LOGIN_URL = '/login/'

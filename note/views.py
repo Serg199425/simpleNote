@@ -8,8 +8,6 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from note.models import Note, NoteUser, NoteGroup, FavoriteNote
 from groups.models import Group
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.db.models import Q
 from IPython import embed
@@ -25,9 +23,6 @@ class EditNoteView(UpdateView):
 			return get_object_or_404(Note, pk=self.kwargs['pk'])
 		except:
 			return
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(EditNoteView, self).dispatch(request, *args, **kwargs)
 	def get_success_url(self):
 		return reverse('note:index')
 	def form_valid(self, form):
@@ -50,9 +45,6 @@ class IndexView(ListView):
 	template_name = "note/index.html"
 	model = Note
 	context_object_name = 'notes'
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(IndexView, self).dispatch(request, *args, **kwargs)
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
 	 	user = self.request.user
@@ -62,9 +54,6 @@ class IndexView(ListView):
 
 class DeleteView(DeleteView):
 	model = Note
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(DeleteView, self).dispatch(request, *args, **kwargs)
 	def delete(self, request, *args, **kwargs):
 		delete_object = Note.objects.get(pk=kwargs['pk'])
 		if delete_object is not None:
@@ -77,17 +66,11 @@ class ShowView(DetailView):
 	template_name = "note/show.html"
 	model = Note
 	context_object_name = 'note'
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(ShowView, self).dispatch(request, *args, **kwargs)
 
 class SharedNotesView(ListView):
 	template_name = "note/shared_notes.html"
 	model = NoteUser
 	context_object_name = 'notes'
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(SharedNotesView, self).dispatch(request, *args, **kwargs)
 	def get_context_data(self, **kwargs):
 		context = super(SharedNotesView, self).get_context_data(**kwargs)
 	 	user = self.request.user
@@ -98,23 +81,17 @@ class SharedNotesView(ListView):
 class AddFavoriteView(RedirectView):
 	permanent = False
 	query_string = False
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(AddFavoriteView, self).dispatch(request, *args, **kwargs)
 	def get_redirect_url(self, pk):
 		note = get_object_or_404(Note, pk=pk)
 		FavoriteNote(note_id=note.id, user_id=self.request.user.id).save()
-		return reverse('note:favorite_index')
+		return self.request.META.get('HTTP_REFERER','/')
 
 class RemoveFavoriteView(DeleteView):
 	model = FavoriteNote
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(RemoveFavoriteView, self).dispatch(request, *args, **kwargs)
 	def delete(self, request, *args, **kwargs):
 		delete_object = FavoriteNote.objects.get(note_id=kwargs['pk'], user_id=self.request.user.id)
 		delete_object.delete()
-		return HttpResponseRedirect(reverse('note:favorite_index'))
+		return HttpResponseRedirect(self.request.META.get('HTTP_REFERER','/'))
 	def get(self, *args, **kwargs):
 		return self.post(*args, **kwargs)
 
@@ -122,9 +99,6 @@ class FavoriteIndexView(ListView):
 	template_name = "note/favorite_index.html"
 	model = FavoriteNote
 	context_object_name = 'favorite_notes'
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(FavoriteIndexView, self).dispatch(request, *args, **kwargs)
 	def get_context_data(self, **kwargs):
 		context = super(FavoriteIndexView, self).get_context_data(**kwargs)
 	 	context['notes'] = self.request.user.favorite_notes.all()

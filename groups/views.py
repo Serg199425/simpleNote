@@ -31,9 +31,6 @@ class AddView(FormView):
 	form_class = AddGroupForm
 	template_name = "groups/add_group_form.html"
 	model = Group
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(AddView, self).dispatch(request, *args, **kwargs)
 	def form_valid(self, form):
 		group = Group(name=form.cleaned_data['name'], creator_id=self.request.user.id)
 		group.save()
@@ -45,9 +42,6 @@ class AddUserToGroupView(FormView):
 	form_class = AddUserToGroupForm
 	template_name = "groups/add_user_to_group_form.html"
 	model = GroupUser
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(AddUserToGroupView, self).dispatch(request, *args, **kwargs)
 	def form_valid(self, form):
 		try:
 			group = Group.objects.get(pk=self.kwargs['pk'])
@@ -70,7 +64,6 @@ class ShowGroupUsersView(ListView):
 class AcceptView(RedirectView):
 	permanent = False
 	query_string = True
-
 	def get_redirect_url(self, pk, *args, **kwargs):
 		group_user = get_object_or_404(GroupUser, pk=pk)
 		group_user.confirmed = True
@@ -79,9 +72,6 @@ class AcceptView(RedirectView):
 
 class DeleteView(DeleteView):
 	model = Group
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(DeleteView, self).dispatch(request, *args, **kwargs)
 	def delete(self, request, *args, **kwargs):
 		delete_object = Group.objects.get(pk=kwargs['pk'])
 		if delete_object is not None:
@@ -92,9 +82,6 @@ class DeleteView(DeleteView):
 
 class DeleteGroupUserView(DeleteView):
 	model = GroupUser
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(DeleteGroupUserView, self).dispatch(request, *args, **kwargs)
 	def delete(self, request, *args, **kwargs):
 		try:
 			delete_object = GroupUser.objects.get(pk=kwargs['pk'])

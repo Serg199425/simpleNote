@@ -30,9 +30,6 @@ class AddFriendView(FormView):
 	form_class = AddFriendForm
 	template_name = "friends/add_friend_form.html"
 	model = Friendship
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(AddFriendView, self).dispatch(request, *args, **kwargs)
 	def form_valid(self, form):
 		try:
 			Friendship(creator=self.request.user, friend=form.cleaned_data['friend'], confirmed=False).save()
@@ -52,9 +49,6 @@ class AcceptView(RedirectView):
 
 class DeleteView(DeleteView):
 	model = Friendship
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, request, *args, **kwargs):
-		return super(DeleteView, self).dispatch(request, *args, **kwargs)
 	def delete(self, request, *args, **kwargs):
 		delete_object = Friendship().get(user_id=kwargs['pk'], current_user_id=self.request.user.id)
 		if delete_object is not None:
