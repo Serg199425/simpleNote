@@ -21,7 +21,7 @@ class Note(models.Model):
 	users = models.ManyToManyField(User, through='NoteUser')
 	def save_users_and_groups(self, users, groups):
 		self.notegroup_set.all().delete()
-		self.notegroup_set.all().delete()
+		self.noteuser_set.all().delete()
 		for user in users:
 			NoteUser(note=self, user=user).save()
 		for group in groups:

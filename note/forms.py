@@ -5,12 +5,13 @@ from note.models import Note, NoteGroup
 from groups.models import Group
 from django_select2 import *
 from django.contrib.auth.models import User
+from IPython import embed
 
-class UserChoices(AutoModelSelect2Field):
+class UserChoices(AutoModelSelect2MultipleField):
 	queryset = User.objects
 	search_fields = ['email__icontains', ]
 	def get_results(self, request, term, page, context):
-		res = [(v.id, v.email) for v in User.objects.filter(email__icontains=term).exclude(id=request.user.id)]
+		res = [(u.id, u.email) for u in User.objects.filter(email__icontains=term).exclude(id=request.user.id)]
 		return NO_ERR_RESP, False, res
 
 class GroupsChoices(AutoModelSelect2Field):
