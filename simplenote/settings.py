@@ -152,3 +152,4 @@ PUBLIC_PATHS = [
 ]
 
 LOGIN_URL = '/login/'
+REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.DateDirectoryUploader'

@@ -887,6 +887,9 @@ fieldset[disabled] .btn-white:active,
 fieldset[disabled] .btn-white.active {
   color: #cacaca;
 }
+.form-control {
+  width: 19.5% !important;
+}
 .form-control,
 .form-control:focus,
 .note-textarea-container,
@@ -6440,3 +6443,5 @@ body.skin-3 {
 .button-center {
   text-align: center;
 }
+
+#id_short_text { outline: none; }

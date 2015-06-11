@@ -27,5 +27,5 @@ class EditNoteForm(forms.ModelForm):
 	users = UserChoices(required=False, widget=AutoHeavySelect2MultipleWidget(attrs={'placeholder':'Share for Users'}))
 	class Meta:
 		model = Note
-		widgets = { 'short_text': RedactorEditor(),}
+		widgets = { 'short_text': RedactorEditor(redactor_options={'buttons': "['html']",'linebreaks': True,'toolbar': True},allow_file_upload=False,allow_image_upload=False,),}
 		fields = ['title', 'users', 'groups','short_text']
