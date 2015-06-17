@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.models import User
+from account.models import User
 from django.views.generic.list import ListView
 from account.models import Friendship
 from django.db.models import Q

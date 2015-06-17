@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'groups',
     'content_pages',
     'django_select2',
+    'simple_email_confirmation',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,7 +58,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'privateviews.middleware.LoginRequiredMiddleware',
 )
 
@@ -78,6 +78,11 @@ TEMPLATES = [
         },
     },
 ]
+
+TEMPLATE_DIRS = (
+    BASE_DIR + '/templates/',
+)
+
 
 WSGI_APPLICATION = 'simplenote.wsgi.application'
 
@@ -117,7 +122,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 ACCOUNT_ACTIVATION_DAYS = 2
-
 AUTH_USER_EMAIL_UNIQUE = True
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
@@ -149,7 +153,15 @@ PUBLIC_VIEWS = [
 PUBLIC_PATHS = [
     '^/login/$',
     '^/register/$',
+    '^/register/complete/$',
 ]
 
 LOGIN_URL = '/login/'
 REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.DateDirectoryUploader'
+
+AUTH_USER_MODEL = 'account.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '1025'
+EMAIL_USE_TLS = True

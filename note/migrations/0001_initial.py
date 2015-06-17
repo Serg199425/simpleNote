@@ -15,13 +15,26 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='FavoriteNote',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Note',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=250, verbose_name='Title')),
                 ('short_text', redactor.fields.RedactorField(verbose_name='Text')),
                 ('date', models.DateTimeField(auto_now_add=True)),
+                ('favorite_users', models.ManyToManyField(related_name=b'favorite_notes', through='note.FavoriteNote', to=settings.AUTH_USER_MODEL)),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='NoteGroup',
@@ -30,6 +43,9 @@ class Migration(migrations.Migration):
                 ('group', models.ForeignKey(to='groups.Group')),
                 ('note', models.ForeignKey(to='note.Note')),
             ],
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='NoteUser',
@@ -38,21 +54,9 @@ class Migration(migrations.Migration):
                 ('note', models.ForeignKey(to='note.Note')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.AddField(
-            model_name='note',
-            name='groups',
-            field=models.ManyToManyField(to='groups.Group', through='note.NoteGroup'),
-        ),
-        migrations.AddField(
-            model_name='note',
-            name='owner',
-            field=models.ForeignKey(related_name='note_owner', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='note',
-            name='users',
-            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL, through='note.NoteUser'),
+            options={
+            },
+            bases=(models.Model,),
         ),
         migrations.AlterUniqueTogether(
             name='noteuser',
@@ -61,5 +65,39 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='notegroup',
             unique_together=set([('group', 'note')]),
+        ),
+        migrations.AddField(
+            model_name='note',
+            name='groups',
+            field=models.ManyToManyField(to='groups.Group', through='note.NoteGroup'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='note',
+            name='owner',
+            field=models.ForeignKey(related_name=b'note_owner', to=settings.AUTH_USER_MODEL),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='note',
+            name='users',
+            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL, through='note.NoteUser'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='favoritenote',
+            name='note',
+            field=models.ForeignKey(to='note.Note'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='favoritenote',
+            name='user',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='favoritenote',
+            unique_together=set([('user', 'note')]),
         ),
     ]

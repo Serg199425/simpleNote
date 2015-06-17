@@ -11,7 +11,7 @@ from groups.models import Group
 from django.views.generic.detail import DetailView
 from django.db.models import Q
 from IPython import embed
-from django.contrib.auth.models import User
+from account.models import User
 from django.shortcuts import get_object_or_404
 
 class EditNoteView(UpdateView):

@@ -1,13 +1,12 @@
 from django.db import models
 from redactor.fields import RedactorField
-from django.contrib.auth.models import User
 from django.db.models import Q
 from groups.models import Group
 import select2.fields
 from IPython import embed
 
 class Note(models.Model):
-	owner = models.ForeignKey(User, related_name='note_owner')
+	owner = models.ForeignKey('account.User', related_name='note_owner')
 	title = models.CharField(max_length=250, verbose_name=u'Title')
 	short_text = RedactorField(
 		verbose_name=u'Text',
@@ -18,8 +17,8 @@ class Note(models.Model):
 	)
 	date = models.DateTimeField(auto_now_add=True, blank=True)
 	groups = models.ManyToManyField(Group, through='NoteGroup')
-	users = models.ManyToManyField(User, through='NoteUser')
-	favorite_users = models.ManyToManyField(User, through='FavoriteNote', related_name='favorite_notes')
+	users = models.ManyToManyField('account.User', through='NoteUser')
+	favorite_users = models.ManyToManyField('account.User', through='FavoriteNote', related_name='favorite_notes')
 	def save_users_and_groups(self, users, groups):
 		self.notegroup_set.all().delete()
 		self.noteuser_set.all().delete()
@@ -30,7 +29,7 @@ class Note(models.Model):
 
 class NoteUser(models.Model):
 	note = models.ForeignKey(Note)
-	user = models.ForeignKey(User)
+	user = models.ForeignKey('account.User')
 	class Meta:
 		unique_together = ('user', 'note')
 
@@ -42,7 +41,7 @@ class NoteGroup(models.Model):
 
 class FavoriteNote(models.Model):
 	note = models.ForeignKey(Note)
-	user = models.ForeignKey(User)
+	user = models.ForeignKey('account.User')
 	class Meta:
 		unique_together = ('user', 'note')
 		

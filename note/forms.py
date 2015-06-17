@@ -4,7 +4,7 @@ from redactor.fields import RedactorField
 from note.models import Note, NoteGroup
 from groups.models import Group
 from django_select2 import *
-from django.contrib.auth.models import User
+from account.models import User
 from IPython import embed
 
 class UserChoices(AutoModelSelect2MultipleField):

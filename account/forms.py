@@ -1,9 +1,9 @@
 from django import forms
 from registration.forms import RegistrationFormUniqueEmail
-from django.contrib.auth.models import User
-from account.models import Account
+from account.models import Account, User
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.images import get_image_dimensions
+from IPython import embed
 
 class RegistrationFormAccount(RegistrationFormUniqueEmail):
 	username = forms.CharField(widget=forms.HiddenInput, required=False)
@@ -34,6 +34,11 @@ class RegistrationFormAccount(RegistrationFormUniqueEmail):
 class LoginForm(AuthenticationForm):
 	username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':"Username or Email"}))
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':"Password"}))
+	def clean_password(self):
+		user = User.objects.filter(email=self.cleaned_data['username']).first()
+		if not user or not user.check_password(self.cleaned_data['password']):
+			raise forms.ValidationError('This email or password is incorrect.')
+		return self.cleaned_data['password']
 
 class EditForm(forms.Form):
 	first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':"First Name"}))

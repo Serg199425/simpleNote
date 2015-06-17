@@ -1,4 +1,17 @@
 {% extends "base.html"  %}
 {% block content %}
-<h1>Registration Complete</h1>
+	<div class="middle-box text-center loginscreen animated fadeInDown">
+	    <div>
+	        <div>
+	            <h1 class="logo-name">SN+</h1>
+	        </div>
+	        <h3>Registration Complete</h3>
+	        <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+	            <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
+	        </p>
+	        <p>Login in. To see it in action.</p>
+			<a class="btn btn-sm btn-white btn-block" href="{% url 'account:login_path'%}">Login</a>
+	        <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+	    </div>
+	</div>
 {% endblock %}

@@ -1,7 +1,6 @@
 from django import forms
-from django.contrib.auth.models import User
 from IPython import embed
-from account.models import Friendship
+from account.models import Friendship, User
 from django_select2 import *
 
 class UserChoices(AutoModelSelect2Field):

@@ -1,12 +1,16 @@
 from django.db import models
-from account.fields import AutoOneToOneField
-from django.contrib.auth.models import User
 from note.models import NoteUser, NoteGroup, Note
 from IPython import embed
 from itertools import chain
+from django.contrib.auth.models import AbstractUser
+from simple_email_confirmation import SimpleEmailConfirmationUserMixin
+
+class User(SimpleEmailConfirmationUserMixin, AbstractUser):
+    pass
+
 
 class Account(models.Model):
-	user = AutoOneToOneField(User, related_name='account', verbose_name=('User'), primary_key=True)
+	user = models.OneToOneField(User, related_name='account', verbose_name=('User'), primary_key=True)
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
 	avatar = models.ImageField(default='image.jpg')
