@@ -4,7 +4,7 @@ from django.views.generic.list import ListView
 from account.models import Friendship
 from django.db.models import Q
 from groups.forms import AddGroupForm, AddUserToGroupForm
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -35,17 +35,29 @@ class AddView(FormView):
 		group = Group(name=form.cleaned_data['name'], creator_id=self.request.user.id)
 		group.save()
 		GroupUser(group_id=group.id, user_id=self.request.user.id, confirmed=True, is_creator=True).save()
+		for user in form.cleaned_data['users']:
+			GroupUser(group_id=group.id, user_id=user.id, confirmed=False, is_creator=False).save()
 		return HttpResponseRedirect(reverse('groups:index'))
 
 
-class AddUserToGroupView(FormView):
+class AddUserToGroupView(UpdateView):
 	form_class = AddUserToGroupForm
 	template_name = "groups/add_user_to_group_form.html"
-	model = GroupUser
+	model = Group
+	def get_object(self):
+		group = Group.objects.get(pk=self.kwargs['pk'])
+		form = AddUserToGroupForm(initial={'users': group.users.exclude(pk=group.creator_id)})
+		try:
+			return get_object_or_404(Group, pk=self.kwargs['pk'])
+		except:
+			return
 	def form_valid(self, form):
 		try:
 			group = Group.objects.get(pk=self.kwargs['pk'])
-			GroupUser(group_id=group.id, user_id=form.cleaned_data['user'].id).save()
+			group.groupuser_set.all().delete()
+			GroupUser(group_id=group.id, user_id=group.creator_id, confirmed=True, is_creator=True).save()
+			for user in form.cleaned_data['users']:
+				GroupUser(group_id=group.id, user_id=user.id, confirmed=False, is_creator=False).save()	
 			return HttpResponseRedirect(reverse('groups:index'))
 		except Group.DoesNotExist:
 			return HttpResponseRedirect(reverse('groups:index'))
@@ -57,7 +69,7 @@ class ShowGroupUsersView(ListView):
 	template_name = "groups/group_users.html"
 	def get_context_data(self, **kwargs):
 		context = super(ShowGroupUsersView, self).get_context_data(**kwargs)
-		context['group_users'] = GroupUser.objects.filter(group_id=self.kwargs['pk'],confirmed=True)
+		context['group_users'] = GroupUser.objects.filter(group_id=self.kwargs['pk'])
 		context['current_group'] = Group.objects.get(pk=self.kwargs['pk'])
 		return context
 

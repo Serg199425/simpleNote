@@ -12,6 +12,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Creator Email</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -23,12 +24,14 @@
                                         <tr class="gradeX">
                                             <td>{{ group_user.user.account.full_name }} (Creator)</td>
                                             <td>{{ group_user.user.email }}</td>
+                                            <td class="button-center">{% if group_user.confirmed %} Confirmed {% else %} Uncofirmed {% endif %}</td>
                                             <td class="button-center"></td>
                                         </tr>
                                     {% else %}
                                         <tr class="gradeX">
                                             <td>{{ group_user.user.account.full_name }}</td>
                                             <td>{{ group_user.user.email }}</td>
+                                            <td class="button-center">{% if group_user.confirmed %} Confirmed {% else %} Uncofirmed {% endif %}</td>
                                             <td class="button-center"><a href="{% url 'groups:delete_user' group_user.id %}">Delete</a></td>
                                         </tr>
                                     {% endif %}
@@ -42,6 +45,7 @@
                                             <td>{{ group_user.user.account.full_name }}</td>
                                         {% endif %}
                                         <td>{{ group_user.user.email }}</td>
+                                        <td class="button-center">{% if group_user.confirmed %} Confirmed {% else %} Uncofirmed {% endif %}</td>
                                         {% if user.email == group_user.user.email %}
                                             <td class="button-center"><a href="{% url 'groups:delete_user' group_user.id %}">Delete</a></td>
                                         {% else %}
@@ -56,6 +60,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                     </tfoot>
