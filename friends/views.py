@@ -22,7 +22,7 @@ class IndexView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
 		user = self.request.user
-		context['friends'] = user.account.friends()
+		context['friendships'] = user.account.friends()
 		context['invitations'] = user.account.invitations()
 		return context
 
@@ -32,7 +32,10 @@ class AddFriendView(FormView):
 	model = Friendship
 	def form_valid(self, form):
 		try:
-			Friendship(creator=self.request.user, friend=form.cleaned_data['friend'], confirmed=False).save()
+			Friendship(creator=self.request.user.account, from_friend=self.request.user.account, 
+						to_friend=form.cleaned_data['friend'].account).save()
+			Friendship(creator=self.request.user.account, to_friend=self.request.user.account, 
+						from_friend=form.cleaned_data['friend'].account).save()
 		except IntegrityError:
 			pass
 		return HttpResponseRedirect(reverse('friends:index'))
@@ -42,17 +45,22 @@ class AcceptView(RedirectView):
 	query_string = True
 
 	def get_redirect_url(self, pk, *args, **kwargs):
-		friendship = get_object_or_404(Friendship, pk=pk)
-		friendship.confirmed = True
-		friendship.save()
+		friendship_invitation = get_object_or_404(Friendship, pk=pk)
+		friendship_source = Friendship.objects.get(creator_id=friendship_invitation.creator.user_id, 
+													to_friend_id=friendship_invitation.creator.user_id)
+		friendship_invitation.confirmed = True
+		friendship_invitation.save()
+		friendship_source.confirmed = True
+		friendship_source.save()
 		return reverse('friends:index')
 
 class DeleteView(DeleteView):
 	model = Friendship
 	def delete(self, request, *args, **kwargs):
-		delete_object = Friendship().get(user_id=kwargs['pk'], current_user_id=self.request.user.id)
-		if delete_object is not None:
-			delete_object.delete()
+		friends_ids = [ kwargs['pk'], self.request.user.id]
+		deleting_objects = Friendship.objects.filter(from_friend__in=friends_ids, to_friend__in=friends_ids)
+		if deleting_objects:
+			deleting_objects.delete()
 		return HttpResponseRedirect(reverse('friends:index'))
 	def get(self, *args, **kwargs):
 		return self.post(*args, **kwargs)
