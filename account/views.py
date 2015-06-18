@@ -11,7 +11,11 @@ from account.models import Account, User
 from django.contrib.auth.decorators import login_required
 from privateviews.decorators import login_not_required
 from django.core.mail import EmailMessage
-
+from django.core import mail
+from django.views.generic.base import RedirectView
+from IPython import embed
+from simple_email_confirmation.models import EmailAddress
+from django.contrib.auth import authenticate, login
 
 class RegistrationFormView(RegistrationView):
 	form_class = RegistrationFormAccount
@@ -19,9 +23,14 @@ class RegistrationFormView(RegistrationView):
 		data = form.cleaned_data
 		new_user = User.objects.create_user(data['email'], data['email'], data['password1'])
 		new_user.confirm_email(new_user.confirmation_key)
-		EmailMessage('Email Confirmation', 'Use %s to confirm your email' % new_user.confirmation_key, "aaa@gmail.com", [data['email']])
+		self.send_email('Email Confirmation', 'Use %s to confirm your email' % new_user.confirmation_key, data['email'])
 		Account(user=new_user, first_name="", last_name="").save()
 		return HttpResponseRedirect(reverse('registration_complete'))
+	def send_email(self, title, message, to_email):
+		connection = mail.get_connection()
+		connection.open()
+		EmailMessage(title, message, 'dev@gmail.com', [to_email], connection=connection).send()
+		connection.close()
 
 class RegistrationCompleteView(TemplateView):
 	template_name = "registration/registration_complete.html"
@@ -62,5 +71,30 @@ class EditView(FormView):
 			return HttpResponseRedirect(reverse('account:edit'))
 		except Account.DoesNotExist:
 			return HttpResponseRedirect('/')
+
+class ConfirmationView(RedirectView):
+	permanent = False
+	query_string = True
+
+	def get_redirect_url(self, confirmation_key, *args, **kwargs):
+		try:
+			user = EmailAddress.objects.get(key=confirmation_key).user
+			if user.is_confirmed:
+				return reverse('account:already_confirmed')
+			user.confirm_email(confirmation_key)
+			if user.is_confirmed:
+				return reverse('account:successfully_confirmed')
+			return reverse('note:index')
+		except EmailAddress.DoesNotExist:
+			return reverse('account:confirmation_key_incorrect')
+
+class ConfirmationKeyIncorrectView(TemplateView):
+	template_name = "account/confirmation_key_incorrect.html"
+
+class AlreadyConfirmedView(TemplateView):
+	template_name = "account/already_confirmed.html"
+
+class SuccessfullyConfirmedView(TemplateView):
+	template_name = "account/successfully_confirmed.html"
 
 		

@@ -154,6 +154,10 @@ PUBLIC_PATHS = [
     '^/login/$',
     '^/register/$',
     '^/register/complete/$',
+    '^/account/confirm/(?P<confirmation_key>[a-zA-Z0-9]+)$',
+    '^/confirmation_key_incorrect/$',
+    '^/already_confirmed/$',
+    '^/successfully_confirmed/$',
 ]
 
 LOGIN_URL = '/login/'
@@ -164,4 +168,4 @@ AUTH_USER_MODEL = 'account.User'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = '1025'
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False

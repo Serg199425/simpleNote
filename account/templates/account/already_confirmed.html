@@ -1,0 +1,14 @@
+{% extends "base.html"  %}
+{% block content %}
+	<div class="middle-box text-center loginscreen animated fadeInDown">
+	    <div>
+	        <div>
+	            <h1 class="logo-name">SN+</h1>
+	        </div>
+	        <h3>This account is already confirmed</h3>
+	        <p>Login in. To see it in action.</p>
+			<a class="btn btn-sm btn-white btn-block" href="{% url 'account:login_path'%}">Login</a>
+	        <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+	    </div>
+	</div>
+{% endblock %}
