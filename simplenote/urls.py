@@ -2,6 +2,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from account.views import RegistrationFormView, LoginFormView, RegistrationCompleteView
 from django.conf import settings
+from simplenote import views
 
 urlpatterns = [
 	url(r'^register/$', RegistrationFormView.as_view(), name='registration_register'),
@@ -18,4 +19,5 @@ urlpatterns = [
     url(r'^redactor/', include('redactor.urls')),
     url(r'^select2/', include('django_select2.urls')),
     url(r'^', include('content_pages.urls', namespace="content_pages")),
+    url(r'^get_notifications/$', views.get_notifications),
 ]

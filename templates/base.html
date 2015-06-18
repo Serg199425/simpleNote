@@ -14,9 +14,11 @@
     {% import_django_select2_css %}
     <!-- For testing importing it again, but with another tag and light=1 -->
     {% import_django_select2_js_css light=1 %}
+    <script src="/static/js/notifications.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/jquery.metisMenu.js"></script>
     <script src="/static/js/inspinia.js"></script>
+    {% block scripts %}{% endblock %}
 </head>
 
 <body>

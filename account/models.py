@@ -16,6 +16,7 @@ class Account(models.Model):
 	avatar = models.ImageField(default='image.jpg')
 	friends = models.ManyToManyField('self', through='Friendship', symmetrical=False, related_name='friends_set', 
 									through_fields=('from_friend', 'to_friend'),)
+	shared_notes_last_seen = models.DateTimeField(blank=True, null=True)
 	def __unicode__(self):
 		return self.full_name()
 	def full_name(self):

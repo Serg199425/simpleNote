@@ -24,7 +24,7 @@ class UserChoices(AutoModelSelect2Field):
 
 class AddFriendForm(forms.ModelForm):
 	friend = UserChoices(widget=AutoHeavySelect2Widget(
-		select2_options = { 'minimumInputLength': 1, 'placeholder':'Add Friend' }))
+		select2_options = { 'minimumInputLength': 1, 'placeholder':'Email or Name' }))
 	class Meta:
 		model = Friendship	
 		fields = ['friend']

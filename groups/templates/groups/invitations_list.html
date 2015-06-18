@@ -1,0 +1,32 @@
+<div class="ibox-content">
+
+<table class="table table-striped table-bordered table-hover dataTables-example" >
+<thead>
+<tr>
+    <th>Group Name</th>
+    <th>Username</th>
+    <th>Email</th>
+    <th></th>
+</tr>
+</thead>
+<tbody>
+    {% for invitation in invitations %}
+        <tr class="gradeX">
+            <td>{{ invitation.group.name }}</td>
+            <td>{{ invitation.group.creator.account.full_name }}</td>
+            <td>{{ invitation.group.creator.email }}</td>
+            <td class="button-center"><a href="{% url 'groups:accept' invitation.id %}">Accept</a></td>
+        </tr>
+    {% endfor %}
+</tbody>
+<tfoot>
+<tr>
+    <th>Group Name</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th></th>
+</tr>
+</tfoot>
+</table>
+
+</div>

@@ -44,6 +44,7 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
                 ('avatar', models.ImageField(default=b'image.jpg', upload_to=b'')),
+                ('shared_notes_last_seen', models.DateTimeField(auto_now_add=True, null=True)),
             ],
             options={
             },

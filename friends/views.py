@@ -15,6 +15,10 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic import DeleteView
 from django.db import IntegrityError
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+import json
+
 
 class IndexView(ListView):
 	model = Friendship
@@ -64,6 +68,14 @@ class DeleteView(DeleteView):
 		return HttpResponseRedirect(reverse('friends:index'))
 	def get(self, *args, **kwargs):
 		return self.post(*args, **kwargs)
+
+def get_friends(request):
+	invitations = request.user.account.invitations()
+	friendships = request.user.account.friends()
+	html = render_to_string("friends/invitations_list.html", { 'invitations': invitations, 'friendships': friendships, })
+	data = {}
+	data['html'] = html
+	return HttpResponse(json.dumps(data), content_type = "application/json")
 
 		
 		

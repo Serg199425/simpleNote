@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^note/add_to_favorite/(?P<pk>\d+)$', AddFavoriteView.as_view(), name='add_favorite'),
     url(r'^favorites/$', FavoriteIndexView.as_view(), name='favorite_index'),
     url(r'^favorites/remove/(?P<pk>\d+)$', RemoveFavoriteView.as_view(), name='remove_favorite'),
+    url(r'^get_shared_notes/$', get_shared_notes),
 )

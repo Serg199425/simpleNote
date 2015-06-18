@@ -22,24 +22,21 @@
                     </div>
                 </li>
                 <li>
-                    <a href="{% url 'note:index' %}"><i class="fa fa-envelope"></i> <span class="nav-label">My Notes</span> <span class="label label-primary pull-right">NEW</span></a>
+                    <a href="{% url 'note:index' %}"><i class="fa fa-envelope"></i> <span class="nav-label">My Notes</span></a>
                 </li>
                 <li>
-                    <a href="{% url 'note:shared' %}"><i class="fa fa-globe"></i> <span class="nav-label">Shared Notes</span><!-- <span class="label label-info pull-right">62 --></span></a>
+                    <a href="{% url 'note:shared' %}" id="shared_notes_button"><i class="fa fa-globe"></i> <span class="nav-label">Shared Notes</span></span></a>
                 </li>
                 <li>
                     <a href="{% url 'note:favorite_index' %}"><i class="fa fa-star"></i> <span class="nav-label">Favorites</span></a>
                 </li>
                 <li>
-                    <a href="{% url 'groups:index' %}"><i class="fa fa-th-large"></i> <span class="nav-label">Groups</span></a>
+                    <a href="{% url 'groups:index' %}" id="groups_button"><i class="fa fa-th-large"></i> <span class="nav-label">Groups</span></a>
                 </li>
                 <li>
-                    <a href="{% url 'friends:index' %}">
+                    <a href="{% url 'friends:index' %}" id="friends_button">
                         <i class="fa fa-sitemap"></i> 
                         <span class="nav-label">Friends</span>
-                        {% if invitations_count > 0 %}
-                            <span class="label label-info pull-right">{{ invitations_count }}</span>
-                        {% endif %}
                     </a>
                 </li>
                 <li class="special_link">

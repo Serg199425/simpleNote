@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from groups.views import IndexView, AddView, AcceptView, DeleteView, AddUserToGroupView, ShowGroupUsersView, DeleteGroupUserView
+from groups.views import *
 
 urlpatterns = patterns('',
     url(r'^groups/$', IndexView.as_view(), name='index'),
@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^groups/delete/(?P<pk>\d+)$', DeleteView.as_view(), name='delete'),
     url(r'^groups/show_users/(?P<pk>\d+)$', ShowGroupUsersView.as_view(), name='show_users'),
     url(r'^groups/delete_user/(?P<pk>\d+)$', DeleteGroupUserView.as_view(), name='delete_user'),
+    url(r'^get_groups_invitations/$', get_groups_invitations),
 )

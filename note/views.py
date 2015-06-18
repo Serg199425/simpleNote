@@ -13,6 +13,10 @@ from django.db.models import Q
 from IPython import embed
 from account.models import User
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+import json
 
 class EditNoteView(UpdateView):
 	form_class = EditNoteForm
@@ -74,6 +78,8 @@ class SharedNotesView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(SharedNotesView, self).get_context_data(**kwargs)
 	 	user = self.request.user
+	 	user.account.shared_notes_last_seen = timezone.now()
+	 	user.account.save()
 	 	context['shared_notes'] = user.account.shared_notes()
 	 	context['favorite_notes'] = self.request.user.favorite_notes.all()
 	 	return context
@@ -104,4 +110,12 @@ class FavoriteIndexView(ListView):
 	 	context['notes'] = self.request.user.favorite_notes.all()
 	 	return context
 		
-		
+def get_shared_notes(request):
+	shared_notes = request.user.account.shared_notes()
+	favorite_notes = request.user.favorite_notes.all()
+	request.user.account.shared_notes_last_seen = timezone.now()
+	request.user.account.save()
+	html = render_to_string("note/shared_notes_list.html", { 'shared_notes': shared_notes, 'favorite_notes': favorite_notes, })
+	data = {}
+	data['html'] = html
+	return HttpResponse(json.dumps(data), content_type = "application/json")		

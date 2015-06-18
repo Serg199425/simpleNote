@@ -15,6 +15,9 @@ from django.views.generic.list import ListView
 from django.views.generic import DeleteView
 from note.models import Note
 from groups.models import Group, GroupUser
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+import json
 from IPython import embed
 
 class IndexView(ListView):
@@ -104,6 +107,14 @@ class DeleteGroupUserView(DeleteView):
 			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	def get(self, *args, **kwargs):
 		return self.post(*args, **kwargs)
+
+def get_groups_invitations(request):
+	invitations = GroupUser.objects.filter(user_id=request.user, confirmed=False)
+	html = render_to_string("groups/invitations_list.html", { 'invitations': invitations, })
+	data = {}
+	data['html'] = html
+	return HttpResponse(json.dumps(data), content_type = "application/json")
+
 
 		
 		
