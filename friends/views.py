@@ -58,6 +58,18 @@ class AcceptView(RedirectView):
 		friendship_source.save()
 		return reverse('friends:index')
 
+class DeclineView(RedirectView):
+	permanent = False
+	query_string = True
+
+	def get_redirect_url(self, pk, *args, **kwargs):
+		friendship_invitation = get_object_or_404(Friendship, pk=pk)
+		friendship_source = Friendship.objects.get(creator_id=friendship_invitation.creator.user_id, 
+													to_friend_id=friendship_invitation.creator.user_id)
+		friendship_invitation.delete()
+		friendship_source.delete()
+		return reverse('friends:index')
+
 class DeleteView(DeleteView):
 	model = Friendship
 	def delete(self, request, *args, **kwargs):

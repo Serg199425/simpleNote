@@ -11,6 +11,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -19,6 +20,7 @@
                             <td>{{ invitation.creator.full_name }}</td>
                             <td>{{ invitation.creator.user.email }}</td>
                             <td class="button-center"><a href="{% url 'friends:accept_friend' invitation.id %}">Accept</a></td>
+                            <td class="button-center"><a href="{% url 'friends:decline' invitation.id %}">Decline</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -26,6 +28,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
+                    <th></th>
                     <th></th>
                 </tr>
                 </tfoot>
