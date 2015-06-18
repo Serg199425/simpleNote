@@ -3,8 +3,7 @@
 <head>
     {% load staticfiles %}
     {% load django_select2_tags %}
-    {% load bootstrap3 %}
-    {% bootstrap_css %}
+    <link href="/static/styles/bootstrap.min.css" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Note</title>
@@ -15,7 +14,7 @@
     {% import_django_select2_css %}
     <!-- For testing importing it again, but with another tag and light=1 -->
     {% import_django_select2_js_css light=1 %}
-    {% bootstrap_javascript %}
+    <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/jquery.metisMenu.js"></script>
     <script src="/static/js/inspinia.js"></script>
 </head>
