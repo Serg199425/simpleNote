@@ -28,6 +28,8 @@ class Account(models.Model):
 			return self.avatar.url
 	def friends(self):
 		return Friendship.objects.filter(to_friend_id=self.user_id, confirmed=True)
+	def all_friends(self):
+		return Friendship.objects.filter(to_friend_id=self.user_id)
 	def invitations(self):
 		return Friendship.objects.filter(to_friend_id=self.user_id, confirmed=False).exclude(creator_id=self.user_id)
 

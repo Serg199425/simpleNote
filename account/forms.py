@@ -3,6 +3,9 @@ from registration.forms import RegistrationFormUniqueEmail
 from account.models import Account, User
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.images import get_image_dimensions
+from django_select2 import AutoModelSelect2MultipleField, NO_ERR_RESP
+import operator
+from django.db.models import Q
 from IPython import embed
 
 class RegistrationFormAccount(RegistrationFormUniqueEmail):
@@ -59,3 +62,18 @@ class EditForm(forms.Form):
 		except AttributeError:
 			pass
 		return avatar
+
+class UserChoices(AutoModelSelect2MultipleField):
+	queryset = User.objects
+	search_fields = ['email__icontains', ]
+	def get_results(self, request, term, page, context):
+		try:
+			query_email = reduce(operator.or_, (Q(email__icontains = word) for word in term.split()))
+			query_first_name = reduce(operator.or_, (Q(account__first_name__icontains = word) for word in term.split()))
+			query_last_name = reduce(operator.or_, (Q(account__last_name__icontains = word) for word in term.split()))
+			results = User.objects.filter(query_first_name | query_last_name | query_email).exclude(id=request.user.id)[:5]
+			results = [(u.id, u.email + ' ' + u.account.first_name + ' ' + u.account.last_name) for u in results]
+			return NO_ERR_RESP, False, results
+		except:
+			results = []
+			return NO_ERR_RESP, False, results
