@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^select2/', include('django_select2.urls')),
     url(r'^', include('content_pages.urls', namespace="content_pages")),
     url(r'^get_notifications/$', views.get_notifications),
+    url(r'^autocomplete_tags/', include('autocomplete_tags.urls')),
 ]

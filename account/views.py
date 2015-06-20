@@ -10,12 +10,12 @@ from django.contrib.auth import logout
 from account.models import Account, User
 from django.contrib.auth.decorators import login_required
 from privateviews.decorators import login_not_required
-from django.core.mail import EmailMessage
-from django.core import mail
 from django.views.generic.base import RedirectView
-from IPython import embed
-from simple_email_confirmation.models import EmailAddress
+from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
+from simple_email_confirmation.models import EmailAddress
+from django.template.loader import render_to_string
 
 class RegistrationFormView(RegistrationView):
 	form_class = RegistrationFormAccount
@@ -23,14 +23,10 @@ class RegistrationFormView(RegistrationView):
 		data = form.cleaned_data
 		new_user = User.objects.create_user(data['email'], data['email'], data['password1'])
 		new_user.confirm_email(new_user.confirmation_key)
-		self.send_email('Email Confirmation', 'Use %s to confirm your email' % new_user.confirmation_key, data['email'])
+		message = render_to_string("account/confirm_email.html", { 'root': request.META['REMOTE_ADDR'], 'user': new_user, })
+		send_mail('Email Confirmation', message, settings.EMAIL_HOST_USER, [ data['email']], fail_silently=False)
 		Account(user=new_user, first_name="", last_name="").save()
 		return HttpResponseRedirect(reverse('registration_complete'))
-	def send_email(self, title, message, to_email):
-		connection = mail.get_connection()
-		connection.open()
-		EmailMessage(title, message, 'dev@gmail.com', [to_email], connection=connection).send()
-		connection.close()
 
 class RegistrationCompleteView(TemplateView):
 	template_name = "registration/registration_complete.html"

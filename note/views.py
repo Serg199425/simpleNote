@@ -35,6 +35,7 @@ class EditNoteView(UpdateView):
 			data = form.cleaned_data
 			note.title = data['title']
 			note.short_text = data['short_text']
+			note.tags = form.cleaned_data['tags']
 			note.save()
 			note.save_users_and_groups(data['users'], data['groups'])
 		except KeyError:

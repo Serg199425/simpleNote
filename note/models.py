@@ -4,6 +4,7 @@ from django.db.models import Q
 from groups.models import Group
 import select2.fields
 from IPython import embed
+from tagging_autocomplete_tagit.models import TagAutocompleteTagItField
 
 class Note(models.Model):
 	owner = models.ForeignKey('account.User', related_name='note_owner')
@@ -19,6 +20,7 @@ class Note(models.Model):
 	groups = models.ManyToManyField(Group, through='NoteGroup')
 	users = models.ManyToManyField('account.User', through='NoteUser')
 	favorite_users = models.ManyToManyField('account.User', through='FavoriteNote', related_name='favorite_notes')
+	tags = TagAutocompleteTagItField(max_tags=False, blank=True)
 	def save_users_and_groups(self, users, groups):
 		self.notegroup_set.all().delete()
 		self.noteuser_set.all().delete()
