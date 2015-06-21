@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from note.forms import EditNoteForm
+from note.forms import EditNoteForm, SearchForm
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView, UpdateView
 from django.views.generic.list import ListView
@@ -50,11 +50,26 @@ class IndexView(ListView):
 	template_name = "note/index.html"
 	model = Note
 	context_object_name = 'notes'
+	def post(self, *args, **kwargs):
+		return self.get(*args, **kwargs)
 	def get_context_data(self, **kwargs):
+		search_tags = ''
 		context = super(IndexView, self).get_context_data(**kwargs)
-	 	user = self.request.user
-	 	context['notes'] = Note.objects.filter(owner_id=user.id)
+		user = self.request.user
+	 	notes =  Note.objects.filter(owner_id=user.id)
 	 	context['favorite_notes'] = user.favorite_notes.all()
+		try:
+			search_title = self.request.POST.get('title')
+			notes = notes.filter(title__icontains=search_title)
+		except:
+			pass
+		try:
+			search_tags = self.request.POST.get('tags')
+			notes = notes.filter(reduce(lambda x, y: x | y, [Q(tags__icontains=tag) for tag in search_tags.split()]))
+		except:
+			pass
+		context['form'] = SearchForm(initial={'title': search_title, 'tags': search_tags})
+		context['notes'] = notes
 	 	return context
 
 class DeleteView(DeleteView):

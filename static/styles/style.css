@@ -6445,3 +6445,27 @@ body.skin-3 {
 }
 
 #id_short_text { outline: none; }
+
+.auto-width {
+  width: auto;
+}
+
+.change-avatar-link {
+  margin-left: 10px;
+}
+
+.edit-accout-fields {
+  width: 300px;
+}
+
+#id_avatar-preview {
+  border-radius: 50%;
+}
+
+.tagit.ui-widget.ui-widget-content.ui-corner-all {
+  width: 288px;
+}
+
+.ui-widget-content.ui-autocomplete-input {
+  padding-left: 6px !important;
+}

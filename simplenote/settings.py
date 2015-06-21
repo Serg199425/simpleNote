@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'simple_email_confirmation',
     'tagging',
     'autocomplete_tags',
+    'awesome_avatar',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -4,6 +4,7 @@ from IPython import embed
 from itertools import chain
 from django.contrib.auth.models import AbstractUser
 from simple_email_confirmation import SimpleEmailConfirmationUserMixin
+from awesome_avatar.fields import AvatarField
 
 class User(SimpleEmailConfirmationUserMixin, AbstractUser):
     pass
@@ -13,7 +14,7 @@ class Account(models.Model):
 	user = models.OneToOneField(User, related_name='account', verbose_name=('User'), primary_key=True)
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
-	avatar = models.ImageField(default='image.jpg')
+	avatar = AvatarField(default='image.jpg', width=100, height=100, upload_to='avatars')
 	friends = models.ManyToManyField('self', through='Friendship', symmetrical=False, related_name='friends_set', 
 									through_fields=('from_friend', 'to_friend'),)
 	shared_notes_last_seen = models.DateTimeField(blank=True, null=True)

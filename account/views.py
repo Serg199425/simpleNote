@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from registration.views import RegistrationView
-from account.forms import RegistrationFormAccount, LoginForm, EditForm
+from account.forms import RegistrationFormAccount, LoginForm, EditForm, EditAvatarForm
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView, UpdateView
 from django.core.urlresolvers import reverse
@@ -16,6 +16,8 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from simple_email_confirmation.models import EmailAddress
 from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
+from IPython import embed
 
 class RegistrationFormView(RegistrationView):
 	form_class = RegistrationFormAccount
@@ -46,27 +48,22 @@ def logout_view(request):
 		logout(request)
 	return HttpResponseRedirect(reverse('account:login_path'))
 
-class EditView(FormView):
+class EditView(UpdateView):
 	form_class = EditForm
 	template_name = "account/edit_form.html"
-	def get_initial(self):
-		user = self.request.user
-		account = Account.objects.get(user_id=user.id)
-		return {'first_name': account.first_name, 'last_name': account.last_name, 'avatar': account.avatar }
-	def form_valid(self, form):
-		first_name = form.cleaned_data['first_name']
-		last_name = form.cleaned_data['last_name']
-		avatar = form.cleaned_data['avatar']
-		user = self.request.user
-		try:
-			account = Account.objects.get(user_id=user.id)
-			account.first_name = first_name
-			account.last_name = last_name
-			account.avatar = avatar
-			account.save()
-			return HttpResponseRedirect(reverse('account:edit'))
-		except Account.DoesNotExist:
-			return HttpResponseRedirect('/')
+	def get_object(self):
+		return self.request.user.account
+	def get_success_url(request):
+		return reverse('note:index')
+
+class EditAvatarView(UpdateView):
+	form_class = EditAvatarForm
+	template_name = "account/edit_avatar.html"
+	def get_object(self):
+		return self.request.user.account
+	def get_success_url(request):
+		return reverse('account:edit')
+
 
 class ConfirmationView(RedirectView):
 	permanent = False

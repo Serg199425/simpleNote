@@ -1,10 +1,6 @@
 {% extends "index.html" %}
 {% block main_content %}
-	<h2>Account <b style="font-weight:400">{{ user.email }}</b></h2>
-	<div class="form-group">
-		<img alt="image" class="img-circle avatar-image" src="{{ user.account.image}}" />
-		<a class='change-avatar-link' href="{% url 'account:avatar_edit' %}">Change Avatar</a>
-	</div>
+	<h2>Avatar Edit</h2>
 	<form method="post" action="" enctype="multipart/form-data">
 		<dl class="register">   
 			{% csrf_token %}

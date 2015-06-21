@@ -43,25 +43,18 @@ class LoginForm(AuthenticationForm):
 			raise forms.ValidationError('This email or password is incorrect.')
 		return self.cleaned_data['password']
 
-class EditForm(forms.Form):
+class EditForm(forms.ModelForm):
 	first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':"First Name"}))
 	last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':"Last Name"}))
-	avatar = forms.ImageField(required=False)
 	class Meta:
 		model = Account
-	def clean_avatar(self):
-		avatar = self.cleaned_data['avatar']
-		try:
-			main, sub = avatar.content_type.split('/')
-			if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
-				raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
-            
-			if len(avatar) > (20 * 1024):
-				raise forms.ValidationError(u'Avatar file size may not exceed 20k.')
+		fields = ['first_name', 'last_name']
+		
+class EditAvatarForm(forms.ModelForm):
+	class Meta:
+		model = Account
+		fields = ['avatar']
 
-		except AttributeError:
-			pass
-		return avatar
 
 class UserChoices(AutoModelSelect2MultipleField):
 	queryset = User.objects

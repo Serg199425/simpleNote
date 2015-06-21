@@ -5,7 +5,7 @@ from note.models import Note, NoteGroup
 from groups.models import Group
 from account.models import User
 from account.forms import UserChoices
-from django_select2 import AutoModelSelect2MultipleField, AutoHeavySelect2MultipleWidget
+from django_select2 import AutoModelSelect2MultipleField, AutoHeavySelect2MultipleWidget, NO_ERR_RESP
 from tagging.forms import TagField
 from tagging_autocomplete_tagit.widgets import TagAutocompleteTagIt
 from IPython import embed
@@ -27,3 +27,10 @@ class EditNoteForm(forms.ModelForm):
 		model = Note
 		widgets = { 'short_text': RedactorEditor(redactor_options={'buttons': "['html']",'linebreaks': True,'toolbar': True},allow_file_upload=False,allow_image_upload=False,),}
 		fields = ['title', 'tags','users', 'groups','short_text']
+
+class SearchForm(forms.ModelForm):
+	title = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control small-input','placeholder':"Title"}))
+	tags = TagField(widget=TagAutocompleteTagIt(max_tags=5), required=False)
+	class Meta:
+		model = Note
+		fields = ['title', 'tags']

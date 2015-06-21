@@ -1,5 +1,18 @@
 {% extends "index.html" %}
 {% block main_content %}
+    <h2>Search</h2>
+    <form method="post" action="" enctype="multipart/form-data">
+        <dl class="register">   
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group note-textarea-container">{{ field }}</div>
+                {% if field.help_text %}<div class="clearfix">{{ field.help_text }}</div>{% endif %}
+                {% if field.errors %}<div class="myerrors clearfix">{{ field.errors }}</div>{% endif %}
+                </dd>
+            {% endfor %}
+        </dl>
+        <input type="submit" value="Search" class="clearfix btn btn-primary block m-b small-button">
+    </form>
 	<h2>Notes List</h2>
 	<div class="row">
 		<div class="col-lg-12">
@@ -57,4 +70,16 @@
         </div>
     </div>
 	<a class="btn btn-sm btn-primary btn-block small-button" href="{% url 'note:add_note' %}">Add new</a>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/jquery-ui.min.js"></script>
+    <link href="/static/jquery-tag-it/css/ui-autocomplete-tag-it.css" rel="stylesheet">
+    <script src="/static/jquery-tag-it/jquery.tag-it.min.js"></script>
+    <script src="/static/jquery-tag-it/tagging_autocomplete_tagit.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".ui-widget-content.ui-autocomplete-input").attr('placeholder', 'Tags');
+        });
+    </script>
 {% endblock %}
