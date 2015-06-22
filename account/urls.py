@@ -4,6 +4,7 @@ from account.views import *
 
 urlpatterns = patterns('',
     url(r'^account/edit/$', EditView.as_view(), name='edit'),
+    url(r'^account/delete/$', DeleteView.as_view(), name='delete'),
     url(r'^account/avatar_edit/$', EditAvatarView.as_view(), name='avatar_edit'),
     url(r'^login/$', LoginFormView.as_view(), name='login_path'),
     url(r'^logout/$', logout_view, name='logout_path'),

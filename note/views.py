@@ -91,12 +91,27 @@ class SharedNotesView(ListView):
 	template_name = "note/shared_notes.html"
 	model = NoteUser
 	context_object_name = 'notes'
+	def post(self, *args, **kwargs):
+		self.template_name = "note/shared_notes_search.html"
+		return self.get(*args, **kwargs)
 	def get_context_data(self, **kwargs):
 		context = super(SharedNotesView, self).get_context_data(**kwargs)
 	 	user = self.request.user
 	 	user.account.shared_notes_last_seen = timezone.now()
 	 	user.account.save()
-	 	context['shared_notes'] = user.account.shared_notes()
+	 	notes = user.account.shared_notes()
+	 	try:
+			search_title = self.request.POST.get('title')
+			notes = notes.filter(title__icontains=search_title)
+		except:
+			pass
+		try:
+			search_tags = self.request.POST.get('tags')
+			notes = notes.filter(reduce(lambda x, y: x | y, [Q(tags__icontains=tag) for tag in search_tags.split()]))
+		except:
+			pass
+		context['form'] = SearchForm(initial={'title': search_title, 'tags': search_tags})
+	 	context['shared_notes'] = notes
 	 	context['favorite_notes'] = self.request.user.favorite_notes.all()
 	 	return context
 
@@ -121,9 +136,24 @@ class FavoriteIndexView(ListView):
 	template_name = "note/favorite_index.html"
 	model = FavoriteNote
 	context_object_name = 'favorite_notes'
+	def post(self, *args, **kwargs):
+		template_name = "note/favorite_index.html"
+		return self.get(*args, **kwargs)
 	def get_context_data(self, **kwargs):
 		context = super(FavoriteIndexView, self).get_context_data(**kwargs)
-	 	context['notes'] = self.request.user.favorite_notes.all()
+	 	notes = self.request.user.favorite_notes.all()
+	 	try:
+			search_title = self.request.POST.get('title')
+			notes = notes.filter(title__icontains=search_title)
+		except:
+			pass
+		try:
+			search_tags = self.request.POST.get('tags')
+			notes = notes.filter(reduce(lambda x, y: x | y, [Q(tags__icontains=tag) for tag in search_tags.split()]))
+		except:
+			pass
+		context['form'] = SearchForm(initial={'title': search_title, 'tags': search_tags})
+		context['notes'] = notes
 	 	return context
 		
 def get_shared_notes(request):

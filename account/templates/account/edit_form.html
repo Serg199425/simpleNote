@@ -16,5 +16,26 @@
 			{% endfor %}
 		</dl>
 		<input type="submit" value="Change" class="clearfix btn btn-primary block m-b small-button">
+		<button type="button" class="btn btn-primary small-button red-button" data-toggle="modal" data-target="#myModal">Destroy</button>
 	</form>
+	<div class="modal fade" id="myModal" role="dialog">
+	    <div class="modal-dialog">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Modal Header</h4>
+	        </div>
+	        <div class="modal-body">
+	          	<p>You are really want to destroy your brilliant account?</p>
+	        	<a class="btn btn-primary red-button" style='float:left' href="{% url 'account:delete' %}">Yes!!</a>
+	          	<button type="button" class="btn btn-primary" data-dismiss="modal" style='float:right'>Nooo!!!</button>
+	          	<br>
+	        </div>
+	        <div class="modal-footer">
+	        	<p>*Think well!</p>
+	        </div>
+	      </div>
+	      
+	    </div>
+	</div>
 {% endblock %}

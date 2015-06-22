@@ -17,6 +17,7 @@ from django.contrib.auth import authenticate, login
 from simple_email_confirmation.models import EmailAddress
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
+from django.views.generic import DeleteView
 from IPython import embed
 
 class RegistrationFormView(RegistrationView):
@@ -89,5 +90,13 @@ class AlreadyConfirmedView(TemplateView):
 
 class SuccessfullyConfirmedView(TemplateView):
 	template_name = "account/successfully_confirmed.html"
+
+class DeleteView(DeleteView):
+	model = User
+	def delete(self, request, *args, **kwargs):
+		request.user.delete()
+		return HttpResponseRedirect(reverse('account:login_path'))
+	def get(self, *args, **kwargs):
+		return self.post(*args, **kwargs)
 
 		

@@ -7,7 +7,8 @@ from django_select2 import AutoModelSelect2MultipleField, AutoHeavySelect2Multip
 
 class AddGroupForm(forms.Form):
 	name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control small-input','placeholder':"Name"}))
-	users = UserChoices()
+	users = UserChoices(required=False, widget=AutoHeavySelect2MultipleWidget(
+		select2_options = { 'minimumInputLength': 1, 'placeholder':'User Name or Email' }))
 	class Meta:
 		model = Group	
 		fields = ['name']

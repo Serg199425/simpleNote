@@ -11,6 +11,7 @@
                         <table class="table table-striped table-bordered table-hover dataTables-example" >
                         <thead>
                         <tr>
+                            <th></th>
                             <th>Name</th>
                             <th>Email</th>
                             <th></th>
@@ -20,6 +21,7 @@
                         <tbody>
                             {% for invitation in invitations %}
                                 <tr class="gradeX">
+                                    <td class="image-cell"><img alt="image" class="img-circle avatar-image" src="{{ invitation.creator.image}}" /></td>
                                     <td>{{ invitation.creator.full_name }}</td>
                                     <td>{{ invitation.creator.user.email }}</td>
                                     <td class="button-center"><a href="{% url 'friends:accept_friend' invitation.id %}">Accept</a></td>
@@ -27,14 +29,6 @@
                                 </tr>
                             {% endfor %}
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        </tfoot>
                         </table>
 
                         </div>
@@ -52,6 +46,7 @@
                         <table class="table table-striped table-bordered table-hover dataTables-example" >
                         <thead>
                         <tr>
+                            <th></th>
                             <th>Name</th>
                             <th>Email</th>
                             <th></th>
@@ -60,19 +55,13 @@
                         <tbody>
                         	{% for friendship in friendships %}
                         	    <tr class="gradeX">
+                                    <td class="image-cell"><img alt="image" class="img-circle avatar-image" src="{{ friendship.from_friend.image}}" /></td>
                         			<td>{{ friendship.from_friend.full_name }}</td>
                         			<td>{{ friendship.from_friend.user.email }}</td>
         		                    <td class="button-center"><a href="{% url 'friends:delete' friendship.from_friend.user_id %}">Delete</a></td>
                         		</tr>
         					{% endfor %}
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th></th>
-                        </tr>
-                        </tfoot>
                         </table>
 
                         </div>
