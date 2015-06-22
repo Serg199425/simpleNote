@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'registration',
     'account',
-    'redactor',
     'note',
     'friends',
     'groups',
@@ -50,6 +49,7 @@ INSTALLED_APPS = (
     'tagging',
     'autocomplete_tags',
     'awesome_avatar',
+    'ckeditor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -131,7 +131,6 @@ EMAIL_HOST_USER = 'seregasivyi@gmail.com'
 EMAIL_HOST_PASSWORD = 'serg199425'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'seregasivyi@gmail.com'
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     '/styles/',
@@ -173,3 +172,4 @@ AUTH_USER_MODEL = 'account.User'
 # EMAIL_USE_TLS = False
 
 TAGGING_AUTOCOMPLETE_JS_BASE_URL = 'static/jquery-tag-it'
+CKEDITOR_UPLOAD_PATH = "uploads/"

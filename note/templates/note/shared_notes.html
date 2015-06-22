@@ -35,7 +35,7 @@
                         	{% for note in shared_notes %}
                         	    <tr class="gradeX">
                         			<td>{{ note.title }}</td>
-                        			<td>{{ note.short_text }}</td>
+                        			<td class="short-text">{{ note.short_text }}</td>
                         			<td>{{ note.date }}</td>
                         			<td class="button-center"><a href="{% url 'note:show_note' note.id %}">Show</a></td>
                                     {% if note in favorite_notes %}

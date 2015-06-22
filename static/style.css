@@ -887,6 +887,9 @@ fieldset[disabled] .btn-white:active,
 fieldset[disabled] .btn-white.active {
   color: #cacaca;
 }
+/*.form-control {
+  width: 19.5% !important;
+}*/
 .form-control,
 .form-control:focus,
 .note-textarea-container,
@@ -6439,4 +6442,73 @@ body.skin-3 {
 
 .button-center {
   text-align: center;
+}
+
+#id_short_text { outline: none; }
+
+.auto-width {
+  width: auto;
+}
+
+.change-avatar-link {
+  margin-left: 10px;
+}
+
+.edit-accout-fields {
+  width: 300px;
+}
+
+#id_avatar-preview {
+  border-radius: 50%;
+}
+
+.tagit.ui-widget.ui-widget-content.ui-corner-all {
+  width: 288px;
+}
+
+.ui-widget-content.ui-autocomplete-input {
+  padding-left: 6px !important;
+}
+
+.select2-input.select2-default {
+  padding-left: 11px !important;
+}
+
+.short-text {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.red-button {
+  outline: none !important;
+  background-color: #ff4c4c;
+  border-color: #f42a2a;
+}
+
+.red-button:hover {
+  background-color: #f42a2a;
+  border-color: #f42a2a;
+}
+
+.red-button:focus {
+  background-color: #f42a2a;
+  border-color: #f42a2a;
+}
+
+.image-cell {
+  width: 78px;
+}
+
+.ibox-content {
+  width: 90%;
+}
+
+.table {
+  width: auto;
+}
+
+td {
+  vertical-align: middle !important;
 }

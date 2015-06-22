@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$',
             'django.views.static.serve',
             {'document_root': settings.MEDIA_ROOT, }),
-    url(r'^redactor/', include('redactor.urls')),
+    url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^select2/', include('django_select2.urls')),
     url(r'^', include('content_pages.urls', namespace="content_pages")),
     url(r'^get_notifications/$', views.get_notifications),
