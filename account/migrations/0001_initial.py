@@ -6,6 +6,7 @@ import django.utils.timezone
 from django.conf import settings
 import django.core.validators
 import simple_email_confirmation.models
+import awesome_avatar.fields
 
 
 class Migration(migrations.Migration):
@@ -43,8 +44,8 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(related_name=b'account', primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL, verbose_name=b'User')),
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
-                ('avatar', models.ImageField(default=b'image.jpg', upload_to=b'')),
-                ('shared_notes_last_seen', models.DateTimeField(auto_now_add=True, null=True)),
+                ('avatar', awesome_avatar.fields.AvatarField(default=b'image.jpg', upload_to=b'avatars')),
+                ('shared_notes_last_seen', models.DateTimeField(null=True, blank=True)),
             ],
             options={
             },

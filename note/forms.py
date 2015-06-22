@@ -1,6 +1,4 @@
 from django import forms
-from redactor.widgets import RedactorEditor
-from redactor.fields import RedactorField
 from note.models import Note, NoteGroup
 from groups.models import Group
 from account.models import User

@@ -1,9 +1,6 @@
 from django.db import models
-from redactor.fields import RedactorField
 from django.db.models import Q
 from groups.models import Group
-import select2.fields
-from IPython import embed
 from tagging_autocomplete_tagit.models import TagAutocompleteTagItField
 from ckeditor.fields import RichTextField
 
