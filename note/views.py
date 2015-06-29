@@ -36,6 +36,7 @@ class EditNoteView(UpdateView):
 			note.title = data['title']
 			note.short_text = data['short_text']
 			note.tags = form.cleaned_data['tags']
+			note.date = timezone.now()
 			note.save()
 			note.save_users_and_groups(data['users'], data['groups'])
 		except KeyError:

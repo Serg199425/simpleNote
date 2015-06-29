@@ -49,6 +49,8 @@ INSTALLED_APPS = (
     'autocomplete_tags',
     'awesome_avatar',
     'ckeditor',
+    'django_sockjs_tornado',
+    'websocket_server',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -172,3 +174,10 @@ AUTH_USER_MODEL = 'account.User'
 
 TAGGING_AUTOCOMPLETE_JS_BASE_URL = 'static/jquery-tag-it'
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+SOCKJS_CLASSES = (
+    'simplenote.websocket_server.socket_server.MyConnection',
+)
+
+SOCKJS_PORT = 9999
+SOCKJS_CHANNEL = 'echo'

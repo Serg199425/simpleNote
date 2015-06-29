@@ -3,6 +3,23 @@ from django.db.models import Q
 from groups.models import Group
 from tagging_autocomplete_tagit.models import TagAutocompleteTagItField
 from ckeditor.fields import RichTextField
+from django.conf import settings
+import redis
+from django.core import serializers
+from IPython import embed
+
+ORDERS_FREE_LOCK_TIME = getattr(settings, 'ORDERS_FREE_LOCK_TIME', 0)
+ORDERS_REDIS_HOST = getattr(settings, 'ORDERS_REDIS_HOST', 'localhost')
+ORDERS_REDIS_PORT = getattr(settings, 'ORDERS_REDIS_PORT', 6379)
+ORDERS_REDIS_PASSWORD = getattr(settings, 'ORDERS_REDIS_PASSWORD', None)
+ORDERS_REDIS_DB = getattr(settings, 'ORDERS_REDIS_DB', 0)
+
+service_queue = redis.StrictRedis(
+    host=ORDERS_REDIS_HOST,
+    port=ORDERS_REDIS_PORT,
+    db=ORDERS_REDIS_DB,
+    password=ORDERS_REDIS_PASSWORD
+).publish
 
 class Note(models.Model):
 	owner = models.ForeignKey('account.User', related_name='note_owner')
@@ -20,6 +37,12 @@ class Note(models.Model):
 			NoteUser(note=self, user=user).save()
 		for group in groups:
 			NoteGroup(note=self, group=group).save()
+		service_queue('update_notes', serializers.serialize('json', [self]))
+	def has_access(self, user):
+		if bool(set(user.group_set.all()) & set(self.groups.all())) or user in self.users.all():
+			return True
+		else:
+			return False
 
 class NoteUser(models.Model):
 	note = models.ForeignKey(Note)
@@ -38,4 +61,6 @@ class FavoriteNote(models.Model):
 	user = models.ForeignKey('account.User')
 	class Meta:
 		unique_together = ('user', 'note')
+	
+
 		
